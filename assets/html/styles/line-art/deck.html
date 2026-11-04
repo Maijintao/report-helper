@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>桌面照明设计</title>
+  <style>
+    :root {
+      --paper: #f5f3ea;
+      --ink: #272723;
+      --accent: #b83e1d;
+      --rule: color-mix(in srgb, var(--ink) 26%, transparent);
+      --margin: clamp(1.25rem, 5vw, 6rem);
+      --mono: ui-monospace, Menlo, Consolas, monospace;
+      color-scheme: light;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: system-ui, "PingFang SC", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .deck { position: relative; }
+    .slide {
+      display: grid;
+      min-block-size: 100svh;
+      align-content: center;
+      gap: clamp(1.3rem, 3.5vh, 2.7rem);
+      padding: clamp(1.8rem, 6vh, 5rem) var(--margin) max(3.5rem, 7vh);
+    }
+    .slide[hidden] { display: none; }
+    h1, h2, h3, p, figure, dl, dd { margin: 0; }
+    h1, h2 {
+      font-size: clamp(2.15rem, 5vw, 5.5rem);
+      font-weight: 680;
+      line-height: 1.08;
+      text-wrap: balance;
+    }
+    h3 { font-size: clamp(1.2rem, 1.85vw, 1.8rem); }
+    p, dd { font-size: clamp(1rem, 1.45vw, 1.35rem); line-height: 1.6; }
+    .eyebrow, .index, #slide-status { font: 0.85rem/1.4 var(--mono); }
+    .eyebrow { letter-spacing: 0.14em; }
+    .cover { gap: clamp(0.9rem, 2.4vh, 1.8rem); }
+    .cover .eyebrow {
+      padding-block-end: 0.7rem;
+      border-block-end: 1px solid var(--rule);
+    }
+    svg { display: block; inline-size: 100%; block-size: auto; }
+    .cover-figure svg {
+      inline-size: min(100%, 67rem);
+      max-block-size: 55svh;
+      margin-inline: auto;
+    }
+    .cover-title {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      align-items: end;
+      gap: 1rem 3rem;
+      padding-block-start: 1rem;
+      border-block-start: 1px solid var(--rule);
+    }
+    .cover-title p { max-inline-size: 23em; }
+    .technical-line {
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .guide { opacity: 0.36; stroke-dasharray: 7 6; }
+    .accent { color: var(--accent); }
+
+    .states {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-block: 1px solid var(--rule);
+    }
+    .states figure {
+      display: grid;
+      align-content: start;
+      gap: 0.75rem;
+      padding: clamp(0.9rem, 2.4vw, 2.25rem);
+    }
+    .states figure + figure { border-inline-start: 1px solid var(--rule); }
+    .states svg { max-block-size: 27svh; }
+    .states figcaption p { margin-block-start: 0.4rem; }
+
+    .measurement {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      align-items: center;
+      gap: clamp(1.4rem, 6vw, 6rem);
+    }
+    .measurement svg { max-block-size: 54svh; }
+    .measurement dl > div {
+      padding-block: 0.8rem;
+      border-block-start: 1px solid var(--rule);
+    }
+    .measurement dt { margin-block-end: 0.3rem; font-weight: 650; }
+    #slide-status {
+      position: absolute;
+      inset-inline-end: var(--margin);
+      inset-block-end: 1rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .slide:not([hidden]) > :is(.states, .measurement) {
+        animation: reveal 220ms ease-out both;
+      }
+      @keyframes reveal {
+        from { opacity: 0.5; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    }
+
+    @media (max-width: 45rem) {
+      .cover-title, .measurement, .states { grid-template-columns: minmax(0, 1fr); }
+      .states figure + figure { border-inline-start: 0; border-block-start: 1px solid var(--rule); }
+      .states svg { max-block-size: 10rem; }
+      .cover-figure svg { max-block-size: 43svh; }
+    }
+
+    @media print {
+      .slide, .slide[hidden] { display: grid; min-block-size: 0; padding: 1cm; }
+      .slide + .slide { break-before: page; }
+      #slide-status { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="桌面照明设计汇报">
+    <section class="slide cover" aria-labelledby="title">
+      <p class="eyebrow">桌面照明 / 原型设计</p>
+      <figure class="cover-figure">
+        <svg viewBox="0 0 940 404" role="img" aria-label="同一台灯的左半为线稿，右半呈现灯罩明暗和桌面投影">
+          <defs>
+            <clipPath id="rendered-half"><rect x="470" width="470" height="404"/></clipPath>
+            <pattern id="hatching" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(28)">
+              <path d="M0 0v5" stroke="currentColor" stroke-width="1.5" opacity="0.32"/>
+            </pattern>
+            <path id="base" d="M220 329q21-19 68-23h211q55 1 77 23v14q-30 15-82 15H287q-43-1-67-15Z"/>
+            <path id="arm" d="m297 326 19-83 13-5L462 92l13 11-132 150-19 73Z"/>
+            <path id="shade" d="M333 168c23-44 67-77 122-82h28c60 4 106 34 136 82v11c-51 21-231 21-286 0Z"/>
+            <path id="rim" d="M333 168c54-19 235-19 286 0m-286 11c54-20 235-20 286 0"/>
+          </defs>
+
+          <g class="technical-line guide" stroke-width="1">
+            <path d="M470 39v325M286 240h160M333 159v-38m286 38v-38"/>
+            <path d="M228 321v-32h53M570 321v-32h-51"/>
+          </g>
+          <g clip-path="url(#rendered-half)" color="var(--ink)">
+            <path d="m445 337 109-13 183 33H484Z" fill="currentColor" opacity="0.15"/>
+            <path d="m523 337 45-6 144 26H545Z" fill="currentColor" opacity="0.16"/>
+            <use href="#base" fill="currentColor" opacity="0.14"/>
+            <path d="M452 332h124v11q-30 15-82 15h-42Z" fill="currentColor" opacity="0.28"/>
+            <use href="#arm" fill="currentColor" opacity="0.25"/>
+            <use href="#shade" fill="currentColor" opacity="0.13"/>
+            <path d="M476 87c55 0 115 29 143 81-30-9-58-11-99-12-5-21-22-51-44-69Z" fill="url(#hatching)"/>
+            <path d="M502 157c48 0 91 3 117 11v11c-33 12-75 14-117 15Z" fill="currentColor" opacity="0.28"/>
+            <path d="M478 91c20 9 37 22 45 34-12-11-31-18-49-21Z" fill="var(--paper)" opacity="0.9"/>
+            <path d="m522 196 76-10 104 145H504Z" fill="var(--accent)" opacity="0.055"/>
+            <path d="M534 198l-8 42m42-44 22 44m8-48 43 53" class="technical-line accent" stroke-width="1" opacity="0.65"/>
+          </g>
+          <g class="technical-line" stroke-width="1.75">
+            <use href="#base"/>
+            <path d="M220 329q36 14 81 14h196q46-1 79-14"/>
+            <use href="#arm"/>
+            <path d="m306 326 20-75 139-151" opacity="0.65"/>
+            <circle cx="329" cy="250" r="12" fill="var(--paper)"/>
+            <circle cx="329" cy="250" r="3"/>
+            <path d="M449 87v-8q0-9 9-9h22q9 0 9 9v8"/>
+            <use href="#shade"/>
+            <use href="#rim"/>
+            <path d="M135 358h665" opacity="0.64"/>
+          </g>
+          <g class="technical-line accent" stroke-width="1.5">
+            <path d="M463 42h14m-7-7v14M463 367h14m-7-7v14"/>
+          </g>
+        </svg>
+      </figure>
+      <div class="cover-title">
+        <h1 id="title">桌面照明设计</h1>
+        <p>用可调灯头改变照射方向，让光集中在阅读区域。</p>
+      </div>
+    </section>
+
+    <section class="slide" aria-labelledby="states-title" hidden>
+      <h2 id="states-title">灯头角度决定光线去向</h2>
+      <div class="states">
+        <figure>
+          <p class="index">01 / 向下</p>
+          <svg viewBox="0 0 240 138" role="img" aria-label="灯头向下，光线照在灯头正下方">
+            <g class="technical-line" stroke-width="1.5">
+              <path d="M36 111h168M63 110V62l49-29m-16 24q24-34 48 0Z"/>
+              <path d="M108 61 94 100m26-39v39m12-39 14 39" class="accent"/>
+            </g>
+          </svg>
+          <figcaption><h3>照亮近处</h3><p>光线集中在灯头下方。</p></figcaption>
+        </figure>
+        <figure>
+          <p class="index">02 / 前倾</p>
+          <svg viewBox="0 0 240 138" role="img" aria-label="灯头向前倾斜，光线移向右侧">
+            <g class="technical-line" stroke-width="1.5">
+              <path d="M36 111h168M63 110V62l49-29m-7 19q30-28 48 7Z"/>
+              <path d="m116 58 7 39m6-37 17 37m-3-35 24 35" class="accent"/>
+            </g>
+          </svg>
+          <figcaption><h3>照向前方</h3><p>照射范围随灯头转向。</p></figcaption>
+        </figure>
+        <figure>
+          <p class="index">03 / 遮光</p>
+          <svg viewBox="0 0 240 138" role="img" aria-label="灯罩边缘遮住侧向光线">
+            <g class="technical-line" stroke-width="1.5">
+              <path d="M36 111h168M63 110V62l49-29m-16 24q24-34 48 0v10H96Z"/>
+              <path d="m110 70-7 30m17-30v30m10-30 7 30" class="accent"/>
+              <path d="m145 66 34 19" class="guide"/>
+            </g>
+          </svg>
+          <figcaption><h3>遮住侧光</h3><p>灯罩边缘限制侧向出光。</p></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="slide" aria-labelledby="measurement-title" hidden>
+      <h2 id="measurement-title">在桌面上验证照射范围</h2>
+      <div class="measurement">
+        <figure>
+          <svg viewBox="0 0 480 292" role="img" aria-label="俯视图标出阅读区内的三个测量点和阅读区外的一个测量点">
+            <g class="technical-line" stroke-width="1.5">
+              <path d="M88 42h304v210H88z" opacity="0.5"/>
+              <path d="M176 96q29-12 64 1 35-13 64-1v101q-30-11-64 3-34-14-64-3Zm64 1v103"/>
+              <path d="M101 146h278M240 54v185" class="guide"/>
+              <circle cx="198" cy="146" r="5" fill="var(--accent)" stroke="none"/>
+              <circle cx="240" cy="146" r="5" fill="var(--accent)" stroke="none"/>
+              <circle cx="282" cy="146" r="5" fill="var(--accent)" stroke="none"/>
+              <circle cx="348" cy="146" r="5" class="accent"/>
+            </g>
+          </svg>
+        </figure>
+        <dl>
+          <div><dt>固定条件</dt><dd>灯座、书本位置与环境照明保持一致。</dd></div>
+          <div><dt>测量位置</dt><dd>依次记录阅读区内三个位置与区外一个位置的照度。</dd></div>
+          <div><dt>比较方式</dt><dd>只改变灯头角度，比较各位置的照度变化。</dd></div>
+        </dl>
+      </div>
+    </section>
+    <output id="slide-status" aria-label="页码" aria-live="polite" aria-atomic="true">1 / 3</output>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".deck > .slide"));
+    const status = document.querySelector("#slide-status");
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      currentIndex = index;
+      slides.forEach((slide, slideIndex) => {
+        slide.hidden = slideIndex !== currentIndex;
+      });
+      status.textContent = `${currentIndex + 1} / ${slides.length}`;
+    }
+
+    function moveTo(index) {
+      if (index < 0 || index >= slides.length) return;
+      showSlide(index);
+      window.scrollTo(0, 0);
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable]")) return;
+
+      switch (event.key.toLowerCase()) {
+        case "a":
+        case "arrowleft":
+          moveTo(currentIndex - 1);
+          break;
+        case "d":
+        case "arrowright":
+          moveTo(currentIndex + 1);
+          break;
+        default:
+          return;
+      }
+      event.preventDefault();
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>

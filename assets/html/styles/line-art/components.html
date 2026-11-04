@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>简笔画风 · 小组件备选页</title>
+  <style>
+    :root {
+      --paper: #f5f3ea;
+      --ink: #272723;
+      --accent: #b83e1d;
+      --rule: color-mix(in srgb, var(--ink) 26%, transparent);
+      --mono: ui-monospace, Menlo, Consolas, monospace;
+      color-scheme: light;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: system-ui, "PingFang SC", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main {
+      max-inline-size: 100rem;
+      margin-inline: auto;
+      padding: clamp(1.5rem, 5vw, 6rem);
+    }
+    header { margin-block-end: clamp(2rem, 6vh, 4.5rem); }
+    h1, h2, p, figure { margin: 0; }
+    .eyebrow, .index { font: 0.85rem/1.4 var(--mono); }
+    .eyebrow { color: var(--accent); letter-spacing: 0.12em; }
+    h1 { margin-block: 0.6rem; font-size: clamp(2.1rem, 5.2vw, 5.5rem); line-height: 1.08; }
+    header > p:last-child, figcaption > p { font-size: 1rem; line-height: 1.55; }
+
+    .catalog {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-block: 1px solid var(--rule);
+    }
+    .component {
+      display: grid;
+      align-content: start;
+      grid-template-rows: auto auto 1fr;
+      gap: 1rem;
+      min-inline-size: 0;
+      padding: clamp(1rem, 2.5vw, 2.5rem);
+    }
+    .component + .component { border-inline-start: 1px solid var(--rule); }
+    .component svg {
+      display: block;
+      inline-size: 100%;
+      max-inline-size: 14rem;
+      margin-inline: auto;
+    }
+    .index { color: var(--accent); }
+    h2 { margin-block-end: 0.35rem; font-size: clamp(1.3rem, 2vw, 2rem); }
+
+    @media (max-width: 56rem) {
+      .catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .component:nth-child(2n + 1) { border-inline-start: 0; }
+      .component:nth-child(n + 3) { border-block-start: 1px solid var(--rule); }
+    }
+
+    @media (max-width: 34rem) {
+      .catalog { grid-template-columns: minmax(0, 1fr); }
+      .component + .component { border-inline-start: 0; border-block-start: 1px solid var(--rule); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">简笔画风 / 图形素材</p>
+      <h1>小组件备选页</h1>
+      <p>按汇报中的关系选图，可单独复制每个 SVG。</p>
+    </header>
+
+    <div class="catalog">
+      <figure class="component" id="penetration">
+        <p class="index">[01]</p>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="圆柱穿过一块板"
+          fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m34 105 66-38 66 38-66 38Zm0 0v23l66 38 66-38v-23m-66 38v23"/>
+          <path d="m34 128 66-38 66 38m-66-61v23M81 134v21m38-21v21"
+            stroke-dasharray="5 4" opacity=".45"/>
+          <ellipse cx="100" cy="42" rx="19" ry="11"/>
+          <path d="M81 42v92m38-92v92m-38 21v16c0 6 8.5 11 19 11s19-5 19-11v-16"/>
+        </svg>
+        <figcaption><h2>贯穿</h2><p>适合说明管道、轴或信号穿过一层结构。</p></figcaption>
+      </figure>
+
+      <figure class="component" id="support">
+        <p class="index">[02]</p>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="球体承托在方块的顶点"
+          fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m47 102 53-31 53 31-53 31Zm0 0v49l53 31 53-31v-49m-53 31v49"/>
+          <path d="M100 71v49m-53 31 53-31 53 31" stroke-dasharray="5 4" opacity=".45"/>
+          <circle cx="100" cy="49" r="22"/>
+        </svg>
+        <figcaption><h2>承托</h2><p>适合说明底座与上方部件的支撑关系。</p></figcaption>
+      </figure>
+
+      <figure class="component" id="coverage">
+        <p class="index">[03]</p>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="球形范围包围内部的方块"
+          fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="100" cy="100" r="75"/>
+          <path d="M100 25v121m-64-7 64-39 64 39" stroke-dasharray="5 4" opacity=".42"/>
+          <path d="m60 90 40-23 40 23-40 23Zm0 0v46l40 23 40-23V90m-40 23v46"
+            stroke-dasharray="6 4" opacity=".7"/>
+        </svg>
+        <figcaption><h2>包络</h2><p>适合标示覆盖范围、活动空间或检测边界。</p></figcaption>
+      </figure>
+
+      <figure class="component" id="layers">
+        <p class="index">[04]</p>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="两块沿同一轴线分开的板"
+          fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M100 27v150m-66-86 66-38 66 38m-132 50 66-38 66 38"
+            stroke-dasharray="5 4" opacity=".45"/>
+          <path d="m34 65 66-38 66 38-66 38Zm0 0v26l66 38 66-38V65m-66 38v26"/>
+          <path d="m34 115 66-38 66 38-66 38Zm0 0v26l66 38 66-38v-26m-66 38v26"/>
+        </svg>
+        <figcaption><h2>分层</h2><p>适合展示材料层次、装配顺序或分层结构。</p></figcaption>
+      </figure>
+    </div>
+  </main>
+</body>
+</html>

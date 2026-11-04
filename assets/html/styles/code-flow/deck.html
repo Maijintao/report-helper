@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>单文件汇报</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --surface: #efeee9;
+      --ink: #232323;
+      --line: color-mix(in srgb, var(--ink) 24%, transparent);
+      --mono: ui-monospace, Menlo, Consolas, monospace;
+      --gutter: clamp(1.5rem, 6vw, 7rem);
+      background: var(--surface);
+      color: var(--ink);
+      font-family: system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .deck { position: relative; }
+    .slide {
+      position: relative;
+      min-block-size: 100svh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-content: center;
+      align-items: center;
+      gap: clamp(2rem, 6vw, 7rem);
+      padding: clamp(2rem, 8vh, 6rem) var(--gutter) max(4rem, 8vh);
+    }
+    .slide[hidden] { display: none; }
+    .cover {
+      align-content: end;
+      align-items: start;
+      padding-block: 45svh max(12svh, 4rem);
+    }
+    .flow-header {
+      position: absolute;
+      inset: 0 0 auto;
+      block-size: 41svh;
+    }
+    .cover-context {
+      margin: 0;
+      padding-block-start: 0.85rem;
+      border-block-start: 1px solid var(--line);
+      font: 0.9rem/1.6 var(--mono);
+    }
+    .cover-context dt { margin-block-end: 0.45rem; }
+    .cover-context dd { margin: 0; }
+    .copy, .visual { min-inline-size: 0; }
+    .copy { overflow-wrap: anywhere; }
+    .copy > * { margin: 0; }
+    .eyebrow, .visual-label, #slide-status { font: 0.875rem/1.4 var(--mono); }
+    .eyebrow { letter-spacing: 0.13em; }
+    .copy :is(h1, h2) {
+      margin-block: 1.1rem 1.4rem;
+      max-inline-size: 14em;
+      font-size: clamp(2.3rem, 5.4vw, 6.5rem);
+      font-weight: 650;
+      line-height: 1.08;
+      text-wrap: balance;
+    }
+    .copy > p:last-child {
+      max-inline-size: 28em;
+      color: color-mix(in srgb, var(--ink) 77%, var(--surface));
+      font-size: clamp(1rem, 1.65vw, 1.45rem);
+      line-height: 1.65;
+    }
+    .visual { margin: 0; }
+    .project-figure svg, .project-figure img {
+      display: block;
+      inline-size: 100%;
+      block-size: auto;
+      max-block-size: 51svh;
+      object-fit: contain;
+    }
+    .visual-label { margin-block-start: 1rem; text-align: center; }
+    .flow-canvas {
+      position: absolute;
+      inset: 0;
+      inline-size: 100%;
+      block-size: 100%;
+      pointer-events: none;
+    }
+    .contents {
+      margin: 0;
+      border-block-start: 1px solid var(--line);
+    }
+    .contents div {
+      display: grid;
+      grid-template-columns: minmax(5.5rem, 0.65fr) 1fr;
+      gap: 1rem;
+      align-items: baseline;
+      padding-block: clamp(1rem, 3.2vh, 2rem);
+      border-block-end: 1px solid var(--line);
+    }
+    .contents dt { font: 1rem/1.4 var(--mono); }
+    .contents dd { margin: 0; font-size: clamp(1rem, 1.6vw, 1.4rem); overflow-wrap: anywhere; }
+    #slide-status {
+      position: absolute;
+      inset-inline-end: clamp(1rem, 3vw, 3rem);
+      inset-block-end: 1.15rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media (max-width: 44rem) {
+      .slide { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+      .cover { padding-block: 42svh 4.5rem; }
+      .flow-header { block-size: 38svh; }
+      .project-figure svg, .project-figure img { max-block-size: 28svh; }
+    }
+
+    @media print {
+      :root { color-scheme: light; background: white; color: black; }
+      .slide, .slide[hidden] { display: grid; min-block-size: 0; padding: 1cm; }
+      .slide + .slide { break-before: page; }
+      .eyebrow, .copy > p:last-child, .contents dt { color: inherit; }
+      .contents, .contents div { border-color: currentColor; }
+      .flow-header, #slide-status { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="项目汇报">
+    <section class="slide cover" aria-labelledby="slide-title-1">
+      <div class="flow-header" data-flow="REPORT.HTML    INLINE SVG    KEYBOARD EVENTS    FILE PROTOCOL">
+        <canvas class="flow-canvas" aria-hidden="true"></canvas>
+      </div>
+      <div class="copy">
+        <p class="eyebrow">PROJECT REPORT</p>
+        <h1 id="slide-title-1">单文件汇报</h1>
+        <p>用浏览器离线展示项目内容。</p>
+      </div>
+      <dl class="cover-context">
+        <dt>展示内容</dt>
+        <dd>文件结构与浏览器交互</dd>
+      </dl>
+    </section>
+
+    <section class="slide" aria-labelledby="slide-title-2" hidden>
+      <div class="copy">
+        <p class="eyebrow">REPORT / HTML</p>
+        <h2 id="slide-title-2">带上文件，直接演示</h2>
+        <p>页面、图像和交互随同一个 HTML 文件交付。浏览器可以离线打开。</p>
+      </div>
+      <figure class="visual project-figure">
+        <svg viewBox="0 0 288 192" aria-hidden="true">
+          <path d="M79 24h88l42 42v102H79z M167 24v42h42" fill="none"
+            stroke="currentColor" stroke-width="1.5"/>
+          <path d="m123 94-13 13 13 13m42-26 13 13-13 13m-14-33-14 40"
+            fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <figcaption class="visual-label">report.html</figcaption>
+      </figure>
+    </section>
+
+    <section class="slide" aria-labelledby="slide-title-3" hidden>
+      <div class="copy">
+        <p class="eyebrow">REPORT / CONTENTS</p>
+        <h2 id="slide-title-3">一个文件装下整份汇报</h2>
+      </div>
+      <dl class="visual contents">
+        <div><dt>HTML</dt><dd>标题、正文和页码</dd></div>
+        <div><dt>SVG</dt><dd>可缩放的项目示意图</dd></div>
+        <div><dt>JavaScript</dt><dd>键盘翻页</dd></div>
+      </dl>
+    </section>
+    <output id="slide-status" aria-label="页码" aria-live="polite" aria-atomic="true">1 / 3</output>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".deck > .slide"));
+    const status = document.querySelector("#slide-status");
+    const theme = getComputedStyle(document.documentElement);
+    const ink = theme.getPropertyValue("--ink").trim();
+    const snow = theme.getPropertyValue("--surface").trim();
+    const header = document.querySelector(".flow-header");
+    let currentIndex = 0;
+
+    function drawHeader() {
+      const canvas = header.querySelector(".flow-canvas");
+      const { width, height } = canvas.getBoundingClientRect();
+      if (width === 0 || height === 0) return;
+      const characters = Array.from(header.dataset.flow + "    ·    ");
+      const scale = Math.min(devicePixelRatio, 2);
+      canvas.width = Math.ceil(width * scale);
+      canvas.height = Math.ceil(height * scale);
+      const context = canvas.getContext("2d");
+      context.scale(scale, scale);
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      const cellWidth = Math.max(7, Math.round(width / 165));
+      const cellHeight = cellWidth + 4;
+      const columns = Math.ceil(width / cellWidth);
+      const silhouette = new Path2D();
+      const seam = Array.from({ length: columns }, (_, column) => {
+        const wave = Math.sin(column * 0.15) * 0.07 + Math.sin(column * 0.34) * 0.036;
+        const step = Math.floor(column / 3) % 3 - 1;
+        const y = cellHeight * Math.round(height * (0.59 + wave) / cellHeight + step * 0.45);
+        silhouette.rect(column * cellWidth, 0, cellWidth, y);
+        return y;
+      });
+
+      context.save();
+      context.fillStyle = ink;
+      context.fill(silhouette);
+      context.clip(silhouette);
+      context.fillStyle = snow;
+      const centerX = width * 0.48;
+      const centerY = -height * 0.24;
+      const spacing = Math.max(20, Math.min(34, height * 0.1));
+      const outerRadius = Math.hypot(Math.max(centerX, width - centerX), height);
+      for (let radius = spacing, ring = 0; radius <= outerRadius; radius += spacing, ring += 1) {
+        const fontSize = Math.min(18, Math.max(12, 10 + radius * 0.016));
+        const pitch = fontSize * 0.72;
+        const step = pitch / radius;
+        const travel = ring * 36;
+        const offset = Math.floor(travel / pitch);
+        context.font = fontSize + "px ui-monospace, Menlo, Consolas, monospace";
+        for (let slot = 0; slot * step < Math.PI; slot += 1) {
+          const angle = slot * step - (travel % pitch) / radius;
+          const x = centerX + Math.cos(angle) * radius;
+          const y = centerY + Math.sin(angle) * radius;
+          if (x < -pitch || x > width + pitch || y < -pitch || y > height * 0.74) continue;
+
+          const glyph = characters[(slot + offset) % characters.length];
+          context.save();
+          context.translate(x, y);
+          context.rotate(angle + Math.PI / 2);
+          context.globalAlpha = glyph === " " ? 0.35 : 0.9;
+          context.fillText(glyph === " " ? "·" : glyph, 0, 0, pitch);
+          context.restore();
+        }
+      }
+      context.restore();
+
+      context.save();
+      context.font = Math.min(10, cellWidth) + "px ui-monospace, Menlo, Consolas, monospace";
+      seam.forEach((y, column) => {
+        const x = column * cellWidth;
+        for (let row = -2; row < 7; row += 1) {
+          const pattern = (column * 37 + row * 29 + column * row * 3 + 400) % 23;
+          if (pattern >= 13 - Math.max(0, row) * 1.8) continue;
+          const cellY = y + row * cellHeight;
+          const inverted = row < 0 || (row < 3 && pattern < 2);
+          if (row >= 0 && inverted) {
+            context.globalAlpha = 1;
+            context.fillStyle = ink;
+            context.fillRect(x, cellY, cellWidth, cellHeight);
+          }
+          const position = column + (row + 2) * 9;
+          context.globalAlpha = inverted ? 0.76 : Math.max(0.18, 0.62 - row * 0.09);
+          context.fillStyle = inverted ? snow : ink;
+          context.fillText(characters[position % characters.length], x + cellWidth / 2, cellY + cellHeight / 2);
+        }
+      });
+      context.restore();
+    }
+
+    function showSlide(index) {
+      currentIndex = index;
+      slides.forEach((slide, slideIndex) => {
+        slide.hidden = slideIndex !== currentIndex;
+      });
+      status.textContent = `${currentIndex + 1} / ${slides.length}`;
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable]")) return;
+      const key = event.key.toLowerCase();
+      let offset;
+      if (key === "a" || key === "arrowleft") offset = -1;
+      else if (key === "d" || key === "arrowright") offset = 1;
+      else return;
+
+      event.preventDefault();
+      const next = currentIndex + offset;
+      if (next < 0 || next >= slides.length) return;
+      showSlide(next);
+      window.scrollTo(0, 0);
+    });
+
+    if (header) new ResizeObserver(drawHeader).observe(header);
+    showSlide(0);
+  </script>
+</body>
+</html>

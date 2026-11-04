@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>项目汇报</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas: #f2f3f5;
+      --paper: #fff;
+      --ink: #20242c;
+      --muted: #505763;
+      --line: #cbd0d8;
+      --focus: #2453a6;
+      font-family: system-ui, sans-serif;
+      line-height: 1.5;
+      color: var(--ink);
+      background: var(--canvas);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: clamp(0.75rem, 2.5vw, 2rem);
+      overflow-wrap: anywhere;
+    }
+
+    .deck {
+      position: relative;
+      max-inline-size: 76rem;
+      margin-inline: auto;
+    }
+
+    .slide {
+      --slide-padding: clamp(1.5rem, 6vw, 5rem);
+      display: grid;
+      align-content: center;
+      gap: 1.25rem;
+      min-block-size: clamp(28rem, 68vh, 48rem);
+      padding: var(--slide-padding);
+      padding-block-end: max(3.5rem, var(--slide-padding));
+      border: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .slide + .slide {
+      margin-block-start: 1rem;
+    }
+
+    .slide[hidden] {
+      display: none;
+    }
+
+    .slide[hidden] + .slide {
+      margin-block-start: 0;
+    }
+
+    .slide :where(h1, h2, p, figure, ul) {
+      margin: 0;
+    }
+
+    .slide :where(h1, h2) {
+      max-inline-size: 24ch;
+      font-size: clamp(1.875rem, 4.5vw, 4rem);
+      line-height: 1.15;
+    }
+
+    .slide :where(p, li) {
+      max-inline-size: 56ch;
+      font-size: clamp(1.0625rem, 2vw, 1.5rem);
+    }
+
+    .slide ul {
+      padding-inline-start: 1.4em;
+    }
+
+    .slide li + li {
+      margin-block-start: 0.5em;
+    }
+
+    .slide :where(img, svg, video) {
+      display: block;
+      max-inline-size: 100%;
+      block-size: auto;
+    }
+
+    .slide figcaption {
+      margin-block-start: 0.5rem;
+      color: var(--muted);
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    #slide-status {
+      position: absolute;
+      inset-inline-end: clamp(1.25rem, 3vw, 2rem);
+      inset-block-end: 1rem;
+      color: var(--muted);
+      font-size: 0.875rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media (max-width: 36rem) {
+      .slide {
+        align-content: start;
+        min-block-size: min(32rem, 65vh);
+      }
+    }
+
+    @media print {
+      :root {
+        background: #fff;
+      }
+
+      body {
+        padding: 0;
+      }
+
+      #slide-status {
+        display: none;
+      }
+
+      .slide,
+      .slide[hidden] {
+        display: grid;
+        min-block-size: 0;
+        padding: 1cm;
+        border: 0;
+      }
+
+      .slide + .slide {
+        margin-block-start: 0;
+        break-before: page;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="汇报页面">
+    <!-- 用本次项目的标题、结论和展示证据替换示例页面。 -->
+    <section class="slide" aria-labelledby="slide-title-1">
+      <h1 id="slide-title-1">项目汇报</h1>
+    </section>
+
+    <section class="slide" aria-labelledby="slide-title-2">
+      <h2 id="slide-title-2">展示结果</h2>
+    </section>
+    <output id="slide-status" aria-label="页码" aria-live="polite" aria-atomic="true"></output>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".deck > .slide"));
+    const status = document.querySelector("#slide-status");
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      currentIndex = index;
+      slides.forEach((slide, slideIndex) => {
+        slide.hidden = slideIndex !== currentIndex;
+      });
+      status.textContent = `${currentIndex + 1} / ${slides.length}`;
+    }
+
+    function moveTo(index) {
+      if (index < 0 || index >= slides.length) {
+        return;
+      }
+      showSlide(index);
+      window.scrollTo(0, 0);
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) {
+        return;
+      }
+      if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable]")) {
+        return;
+      }
+
+      switch (event.key.toLowerCase()) {
+        case "a":
+        case "arrowleft":
+          moveTo(currentIndex - 1);
+          break;
+        case "d":
+        case "arrowright":
+          moveTo(currentIndex + 1);
+          break;
+        default:
+          return;
+      }
+      event.preventDefault();
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>

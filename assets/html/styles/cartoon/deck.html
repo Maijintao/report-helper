@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>社区种子交换计划</title>
+  <style>
+    :root {
+      --paper: #fff8e6;
+      --ink: #1438a6;
+      --bright: #ffcf24;
+      --margin: clamp(1.4rem, 6vw, 7rem);
+      color-scheme: light;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: system-ui, "PingFang SC", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    h1, h2, h3, p, figure, ol, dl, dd { margin: 0; }
+    .deck { position: relative; }
+    .slide {
+      display: grid;
+      min-block-size: 100svh;
+      align-content: center;
+      gap: clamp(1.4rem, 5vh, 3.4rem);
+      padding: clamp(1.8rem, 6vh, 5rem) var(--margin) max(3.5rem, 7vh);
+    }
+    .slide[hidden] { display: none; }
+    h1, h2 { font-weight: 800; line-height: 1.08; text-wrap: balance; }
+    h1 { font-size: clamp(2.75rem, 6.5vw, 7.3rem); }
+    h2 { font-size: clamp(2.15rem, 4.6vw, 5.1rem); }
+    h3 { font-size: clamp(1.25rem, 2.15vw, 1.85rem); }
+    p { font-size: clamp(1rem, 1.5vw, 1.42rem); line-height: 1.6; }
+    svg { display: block; inline-size: 100%; block-size: auto; }
+    .outline {
+      fill: none;
+      stroke: var(--ink);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .paper { fill: var(--paper); }
+    .bright { fill: var(--bright); }
+    .ink { fill: var(--ink); }
+
+    .cover {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-content: stretch;
+      gap: 0;
+      padding: 0;
+    }
+    .cover-copy {
+      display: grid;
+      align-content: center;
+      gap: clamp(1rem, 4vh, 2.2rem);
+      padding: 3rem var(--margin);
+    }
+    .cover-copy p:last-child { max-inline-size: 19em; }
+    .cover-copy h1 span { display: block; }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.95rem;
+      font-weight: 750;
+      letter-spacing: 0.1em;
+    }
+    .eyebrow::before {
+      content: "";
+      inline-size: 0.7em;
+      block-size: 0.7em;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: var(--bright);
+    }
+    .cover-art {
+      display: grid;
+      place-items: center;
+      min-inline-size: 0;
+      padding: 2rem clamp(0.5rem, 2.8vw, 3rem) 4rem;
+      background: var(--bright);
+      border-start-start-radius: clamp(1.8rem, 5vw, 5.5rem);
+    }
+    .cover-art svg { max-block-size: 72svh; max-inline-size: 43rem; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(1.25rem, 4vw, 4rem);
+      padding: 0;
+      list-style: none;
+    }
+    .steps li { display: grid; align-content: start; gap: 0.6rem; }
+    .steps svg { max-block-size: 27svh; }
+    .steps h3 { display: flex; align-items: center; gap: 0.6rem; }
+    .steps h3 span {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      inline-size: 1.65em;
+      block-size: 1.65em;
+      border-radius: 50%;
+      background: var(--bright);
+      font-size: 0.72em;
+    }
+
+    .sample {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      align-items: center;
+    }
+    .sample-copy { display: grid; gap: 1.2rem; }
+    .sample-copy p:last-child { max-inline-size: 19em; }
+    .label-art {
+      display: grid;
+      place-items: center;
+      padding: clamp(1.35rem, 4.5vw, 4.8rem);
+      background: var(--bright);
+      border-radius: clamp(1.6rem, 4vw, 4.5rem) 0 clamp(1.6rem, 4vw, 4.5rem) 0;
+    }
+    .label {
+      inline-size: min(100%, 23rem);
+      padding: clamp(1rem, 2.5vw, 2rem);
+      border: 3px solid var(--ink);
+      border-radius: 0.6rem;
+      background: var(--paper);
+      box-shadow: 8px 8px var(--ink);
+    }
+    .label-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-block-end: 0.65rem;
+      font-weight: 750;
+    }
+    .label-header svg { inline-size: 2.5rem; flex: 0 0 auto; }
+    .label dl > div { padding-block: 0.65rem; border-block-start: 1px solid var(--ink); }
+    .label dt { font-size: 0.84rem; }
+    .label dd { font-size: clamp(1rem, 2.1vw, 1.5rem); font-weight: 750; }
+    #slide-status {
+      position: absolute;
+      inset-inline-end: clamp(1rem, 3vw, 2.8rem);
+      inset-block-end: 1.05rem;
+      font-size: 0.9rem;
+      font-weight: 750;
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .slide:not([hidden]) .steps svg { animation: appear 270ms ease-out both; }
+      .steps li:nth-child(2) svg { animation-delay: 85ms; }
+      .steps li:nth-child(3) svg { animation-delay: 170ms; }
+      @keyframes appear {
+        from { opacity: 0; transform: translateY(9px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    }
+
+    @media (max-width: 45rem) {
+      .cover, .sample, .steps { grid-template-columns: minmax(0, 1fr); }
+      .cover-copy { padding-block: 2rem; }
+      .cover-art { padding: 0.5rem var(--margin) 3rem; }
+      .cover-art svg { max-block-size: 49svh; }
+      .steps { gap: 1.65rem; }
+      .steps svg { max-block-size: 9rem; }
+    }
+
+    @media print {
+      .slide, .slide[hidden] { display: grid; min-block-size: 0; }
+      .slide + .slide { break-before: page; }
+      .steps svg { animation: none; }
+      #slide-status { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="社区种子交换计划汇报">
+    <section class="slide cover" aria-labelledby="cover-title">
+      <div class="cover-copy">
+        <p class="eyebrow">社区种子交换计划</p>
+        <h1 id="cover-title">把一粒种子<span>带回家。</span></h1>
+        <p>带来一包种子，写下它的来历，再换一包带回去。</p>
+      </div>
+      <figure class="cover-art">
+        <svg viewBox="0 0 580 500" role="img" aria-label="种子袋角色伸出手，把一包种子递给另一位参与者">
+          <path class="paper" d="M92 276C57 182 116 98 201 92c75-5 87-48 177-36 100 13 147 92 132 180-10 56-41 101-121 107-82 7-113 52-187 37-49-10-92-55-110-104Z"/>
+          <g class="outline">
+            <path d="M56 429h459M96 436h61m255 0h56" opacity=".6"/>
+            <path d="M79 427c4-27 10-40 18-55m-11 22c-15-2-21-10-20-21 13 1 20 7 20 21Zm5-9c4-17 14-21 24-21-2 13-10 20-24 21Z"/>
+            <path class="bright" d="M156 211c-22 7-48 30-50 51-1 14 13 18 23 8l42-38Z"/>
+            <path class="bright" d="M280 237c31-12 62-33 90-59l16 19c-21 31-51 56-87 67Z"/>
+            <path class="ink" d="M158 325h28v64l-14 26h-30c-10-1-12-13-2-18l18-8Zm85 0h29l14 63 24 12c7 5 3 15-5 16h-35l-16-23Z"/>
+            <path class="paper" d="M141 145q68 12 158 0l-9 43 11 137q1 20-19 23H156q-18-2-17-19l9-141Z"/>
+            <path d="M148 188h142m-133-24 8 10m20-8 7 9m22-8 6 8m21-8 7 8m23-10 6 8"/>
+            <path class="bright" d="M160 287q55 8 122-3l3 39H156Z"/>
+            <path d="M177 302h55m-55 10h41"/>
+            <path d="M192 227q6-12 12 0m40 0q6-12 12 0m-39 9q7 12 14 0"/>
+            <path d="M209 275q15-6 19-22m-7 12c-12 1-17-3-18-11 10-1 17 3 18 11Zm3-4c1-9 7-13 14-12-2 8-6 12-14 12Z"/>
+            <path class="paper" d="M366 179q-8-13 4-20l20-9q9-2 12 5l7 23q2 8-5 12l-22 8q-8 3-12-4Z"/>
+            <path class="bright" d="m390 131 53-17 16 55-52 17Z"/>
+            <path d="m393 142 53-17m-31 22q6-11 15-9-1 9-10 15"/>
+            <path class="paper" d="M549 210q-43 8-72 6l-42-13q-13-4-10-13 2-6 10-5l20 3-24-9q-11-4-7-11 3-6 11-4l39 12 75-27Z"/>
+            <path d="m455 188 17 4m-75-85-4-12m27 8 2-13m-41 29-11-9"/>
+          </g>
+          <path class="ink" d="M82 137h19v4H82zm8-8h4v20h-4zm401 184h20v4h-20zm8-8h4v20h-4z"/>
+        </svg>
+      </figure>
+    </section>
+
+    <section class="slide" aria-labelledby="steps-title" hidden>
+      <h2 id="steps-title">一包种子，三步交换</h2>
+      <ol class="steps">
+        <li>
+          <svg viewBox="0 0 260 175" aria-hidden="true">
+            <g class="outline">
+              <path class="bright" d="M56 126c-18-30-2-66 28-75 40-12 52-26 90-16 40 11 56 56 30 83-28 28-115 41-148 8Z"/>
+              <path d="M39 146h182"/>
+              <path class="paper" d="m83 69 86-11 10 79-86 6Z"/>
+              <path d="m85 83 86-11m-52 38q6-15 20-16-1 12-13 17m-7 9q9-8 12-15"/>
+              <path d="m69 58-9-9m20 4-3-13"/>
+            </g>
+          </svg>
+          <h3><span>01</span>带来种子</h3>
+          <p>把愿意分享的种子分装成小袋。</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 260 175" aria-hidden="true">
+            <g class="outline">
+              <path class="bright" d="M64 99c8-42 43-64 86-59 38 5 68 25 62 64-5 35-34 39-75 38-36-1-81-7-73-43Z"/>
+              <path d="M39 146h182"/>
+              <path class="paper" d="M81 70h91v72H81Z"/>
+              <path d="M98 91h41m-41 15h54m-54 15h29"/>
+              <path class="bright" d="m151 116 9-25 44-44 16 16-44 44Z"/>
+              <path d="m160 91 16 16m19-51 16 16m-60 44 9-3-6-6"/>
+            </g>
+          </svg>
+          <h3><span>02</span>写清来历</h3>
+          <p>在袋上写品种、采收时间和来源。</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 260 175" aria-hidden="true">
+            <g class="outline">
+              <path class="bright" d="M56 118c-13-36 21-76 66-78 36-2 57-12 83 18 17 19 15 54-11 68-31 15-125 22-138-8Z"/>
+              <path d="M39 146h182"/>
+              <path class="paper" d="m74 97 42-16 19 45-44 17Zm59-40 45-8 9 47-44 10Z"/>
+              <path d="m77 105 42-16m17-24 45-9m-78 60c4-7 10-8 14-7m-27-44c12-15 26-19 42-19m-11-7 11 7-10 7m61 67c-12 14-27 17-42 14m10-5-10 5 8 9"/>
+            </g>
+          </svg>
+          <h3><span>03</span>交换带走</h3>
+          <p>选一包感兴趣的种子，连同标签带回去。</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="slide sample" aria-labelledby="sample-title" hidden>
+      <figure class="label-art" aria-label="种子标签示例">
+        <div class="label">
+          <div class="label-header">
+            <span>种子标签示例</span>
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <path class="outline bright" d="M8 39C7 22 21 9 41 7c-1 18-14 33-33 32Z"/>
+              <path class="outline" d="m8 39 21-20m-11 9v-9m6 4h9"/>
+            </svg>
+          </div>
+          <dl>
+            <div><dt>品种</dt><dd>罗勒</dd></div>
+            <div><dt>采收时间</dt><dd>2026 年 10 月</dd></div>
+            <div><dt>来源</dt><dd>社区花园</dd></div>
+          </dl>
+        </div>
+      </figure>
+      <div class="sample-copy">
+        <h2 id="sample-title">标签跟着种子走</h2>
+        <p>让接手的人知道种的是什么、何时采收，以及可以去哪里问它的来历。</p>
+      </div>
+    </section>
+    <output id="slide-status" aria-label="页码" aria-live="polite" aria-atomic="true">1 / 3</output>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".deck > .slide"));
+    const status = document.querySelector("#slide-status");
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      currentIndex = index;
+      slides.forEach((slide, slideIndex) => {
+        slide.hidden = slideIndex !== currentIndex;
+      });
+      status.textContent = `${currentIndex + 1} / ${slides.length}`;
+    }
+
+    function moveTo(index) {
+      if (index < 0 || index >= slides.length) return;
+      showSlide(index);
+      window.scrollTo(0, 0);
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable]")) return;
+
+      switch (event.key.toLowerCase()) {
+        case "a":
+        case "arrowleft":
+          moveTo(currentIndex - 1);
+          break;
+        case "d":
+        case "arrowright":
+          moveTo(currentIndex + 1);
+          break;
+        default:
+          return;
+      }
+      event.preventDefault();
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>
