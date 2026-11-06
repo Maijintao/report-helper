@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>古典科技风汇报模板</title>
+  <style>
+    :root { color-scheme: light; --paper: #eee9d7; --ink: #181916; --accent: #b83b2e; font-family: system-ui, sans-serif; color: var(--ink); background: var(--paper); }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .deck { position: relative; width: min(100vw, 177.777vh); margin: auto; }
+    .slide { aspect-ratio: 16 / 9; padding: 5% 7% 7%; background: var(--paper); }
+    .slide[hidden] { display: none; }
+    h1, h2, h3, p { margin: 0; }
+    .eyebrow, .number { font-family: ui-monospace, monospace; font-size: clamp(.8rem, 1.1vw, 1rem); letter-spacing: .12em; }
+    h1 { max-width: 11em; font-size: clamp(2rem, 5.6vw, 4.8rem); line-height: 1.12; }
+    h2 { margin-top: .65em; font-size: clamp(1.7rem, 3.3vw, 3rem); }
+    h3 { font-size: clamp(1.2rem, 1.9vw, 1.7rem); }
+    p { font-size: clamp(1rem, 1.45vw, 1.25rem); line-height: 1.6; }
+    .cover { display: grid; grid-template-columns: 1.15fr .85fr; gap: 8%; align-items: center; height: 82%; }
+    .cover p { margin-top: 1.5rem; }
+    .panel { padding: 8%; background: var(--ink); color: var(--paper); }
+    .panel svg, .diagram svg { display: block; width: 100%; height: auto; }
+    .panel svg { max-height: 15rem; }
+    .panel p { margin-top: 1rem; }
+    .mark { color: var(--accent); font-weight: 700; }
+    .diagram { display: grid; grid-template-columns: 1.25fr .75fr; gap: 6%; align-items: center; margin-top: 5%; }
+    .diagram p { margin-top: 1rem; }
+    .data { margin-top: 5%; padding: 3% 4%; background: var(--ink); color: var(--paper); }
+    .data svg { display: block; width: 100%; height: auto; max-height: 15rem; }
+    .data p { margin-top: .75rem; }
+    #slide-status { position: absolute; right: 7%; bottom: 3%; font: .9rem ui-monospace, monospace; }
+    @media (prefers-reduced-motion: no-preference) { .slide:not([hidden]) .entry { animation: reveal .4s ease both; } @keyframes reveal { from { opacity: 0; transform: translateY(.5rem); } to { opacity: 1; transform: translateY(0); } } }
+    @media (max-width: 40rem) { .slide { aspect-ratio: auto; min-height: 100vh; padding: 2rem 1.5rem 5rem; } .cover, .diagram { grid-template-columns: 1fr; gap: 1.5rem; height: auto; margin-top: 2rem; } .data { margin-top: 2rem; padding: 1.2rem; } #slide-status { right: 1.5rem; bottom: 1.2rem; } }
+    @media print { .deck { width: 100%; } .slide, .slide[hidden] { display: block; break-after: page; } #slide-status { display: none; } }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="汇报页面">
+    <section class="slide" aria-labelledby="technical-title-1">
+      <div class="eyebrow">SCIENCE / 01</div>
+      <div class="cover entry">
+        <div><h1 id="technical-title-1">在此填写汇报标题</h1><p>用一句话说明研究对象或展示主题。</p></div>
+        <aside class="panel"><svg viewBox="0 0 300 180" role="img" aria-label="科学图册风格的仪表盘示意图"><circle cx="150" cy="90" r="72" fill="none" stroke="#eee9d7" stroke-width="2"/><circle cx="150" cy="90" r="55" fill="none" stroke="#eee9d7" stroke-width="2"/><path d="M150 18v16M78 90h16M206 90h16M150 146v16M150 90l37 -32" fill="none" stroke="#eee9d7" stroke-width="3"/><circle cx="150" cy="90" r="8" fill="#b83b2e"/></svg><p>主题说明 / <span class="mark">关键问题</span></p></aside>
+      </div>
+    </section>
+    <section class="slide" aria-labelledby="technical-title-2" hidden>
+      <div class="eyebrow">PROCESS / 02</div><h2 id="technical-title-2">说明关键过程</h2>
+      <div class="diagram entry">
+        <svg viewBox="0 0 600 250" role="img" aria-label="三个步骤依次连接的示意图"><path d="M110 125h380" stroke="#181916" stroke-width="3"/><circle cx="110" cy="125" r="52" fill="#eee9d7" stroke="#181916" stroke-width="3"/><circle cx="300" cy="125" r="52" fill="#eee9d7" stroke="#b83b2e" stroke-width="5"/><circle cx="490" cy="125" r="52" fill="#eee9d7" stroke="#181916" stroke-width="3"/><text x="110" y="132" text-anchor="middle" font-size="21" fill="#181916">输入</text><text x="300" y="132" text-anchor="middle" font-size="21" fill="#181916">处理</text><text x="490" y="132" text-anchor="middle" font-size="21" fill="#181916">输出</text></svg>
+        <div><div class="number mark">FIG. 01</div><h3>关键步骤</h3><p>根据实际过程替换图形和文字，标明对象之间的关系。</p></div>
+      </div>
+    </section>
+    <section class="slide" aria-labelledby="technical-title-3" hidden>
+      <div class="eyebrow">EVIDENCE / 03</div><h2 id="technical-title-3">展示一项关键证据</h2>
+      <div class="data entry"><svg viewBox="0 0 900 220" role="img" aria-label="用于替换为实际数据的示意图"><path d="M50 180H850M50 180V25" fill="none" stroke="#eee9d7" stroke-width="2"/><path d="M50 145L220 125L390 140L560 70L730 55L850 35" fill="none" stroke="#eee9d7" stroke-width="4"/><circle cx="560" cy="70" r="9" fill="#b83b2e"/></svg><p>替换为真实图表，补充单位、统计范围和来源。</p></div>
+    </section>
+    <output id="slide-status" aria-label="页码" aria-live="polite" aria-atomic="true"></output>
+  </main>
+  <script>
+    const slides = Array.from(document.querySelectorAll(".deck > section"));
+    const status = document.querySelector("#slide-status");
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      if (index < 0 || index >= slides.length) {
+        return;
+      }
+      currentIndex = index;
+      slides.forEach((slide, position) => {
+        slide.hidden = position !== index;
+      });
+      status.textContent = `${index + 1} / ${slides.length}`;
+      window.scrollTo(0, 0);
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) {
+        return;
+      }
+      if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable]")) {
+        return;
+      }
+      const key = event.key.toLowerCase();
+      if (key === "a" || key === "arrowleft") {
+        showSlide(currentIndex - 1);
+      } else if (key === "d" || key === "arrowright") {
+        showSlide(currentIndex + 1);
+      } else {
+        return;
+      }
+      event.preventDefault();
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>

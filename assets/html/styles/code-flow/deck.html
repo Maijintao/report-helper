@@ -171,7 +171,7 @@
   </main>
 
   <script>
-    const slides = Array.from(document.querySelectorAll(".deck > .slide"));
+    const slides = Array.from(document.querySelectorAll(".deck > section"));
     const status = document.querySelector("#slide-status");
     const theme = getComputedStyle(document.documentElement);
     const ink = theme.getPropertyValue("--ink").trim();
@@ -260,27 +260,33 @@
     }
 
     function showSlide(index) {
+      if (index < 0 || index >= slides.length) {
+        return;
+      }
       currentIndex = index;
-      slides.forEach((slide, slideIndex) => {
-        slide.hidden = slideIndex !== currentIndex;
+      slides.forEach((slide, position) => {
+        slide.hidden = position !== index;
       });
-      status.textContent = `${currentIndex + 1} / ${slides.length}`;
+      status.textContent = `${index + 1} / ${slides.length}`;
+      window.scrollTo(0, 0);
     }
 
     document.addEventListener("keydown", (event) => {
-      if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
-      if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable]")) return;
+      if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) {
+        return;
+      }
+      if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable]")) {
+        return;
+      }
       const key = event.key.toLowerCase();
-      let offset;
-      if (key === "a" || key === "arrowleft") offset = -1;
-      else if (key === "d" || key === "arrowright") offset = 1;
-      else return;
-
+      if (key === "a" || key === "arrowleft") {
+        showSlide(currentIndex - 1);
+      } else if (key === "d" || key === "arrowright") {
+        showSlide(currentIndex + 1);
+      } else {
+        return;
+      }
       event.preventDefault();
-      const next = currentIndex + offset;
-      if (next < 0 || next >= slides.length) return;
-      showSlide(next);
-      window.scrollTo(0, 0);
     });
 
     if (header) new ResizeObserver(drawHeader).observe(header);

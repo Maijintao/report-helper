@@ -16,8 +16,12 @@ description: 为学生课程设计和工作项目设计汇报逐字稿、演示�
 
 ## HTML 设计美化
 
-阅读 [HTML 工作流程](references/html/workflow.md)。制作新汇报页时，可使用 [HTML 基础模板](assets/html/base.html)。美化已有页面时，以现有文件和用户指定的范围为准。所有风格都交付一个可离线打开的 HTML 文件，并在交付前通过 [单文件与翻页验收](references/html/workflow.md#单文件与翻页验收)。
+阅读 [HTML 工作流程](references/html/workflow.md)。制作新汇报页时，可使用 [HTML 基础模板](assets/html/base.html)。美化已有页面时，以现有文件和用户指定的范围为准。所有风格都交付一个可离线打开的 HTML 文件，交付前对照 [常见问题清单](references/html/pitfalls.md)，并通过 [单文件与翻页验收](references/html/workflow.md#单文件与翻页验收)。
 
 ## 同时交付稿件和 HTML
 
 用同一份页面提纲组织两份交付物。记录每页标题、听众需要理解的结论、要展示的证据或操作、预计用时。稿件负责讲解和过渡，HTML 展示台上需要指给听众看的信息。交付前逐页核对顺序、术语、数字和演示步骤，并运行两个板块各自的检查。
+
+## 示例
+
+需要对照成品形态时，阅读 [示例讲稿](examples/report-helper-demo/讲稿.md) 与配套的 `examples/report-helper-demo/汇报页.html`。示例只用于对照格式与页面组织方式，内容以本次项目资料为准。

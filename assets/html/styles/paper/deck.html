@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>稿纸风汇报模板</title>
+  <style>
+    :root { color-scheme: light; --paper: #f4eddf; --ink: #292929; --accent: #ffd54f; font-family: system-ui, sans-serif; color: var(--ink); background: var(--paper); }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .deck { position: relative; width: min(100vw, 177.777vh); margin: auto; }
+    .slide { aspect-ratio: 16 / 9; padding: 5% 7% 7%; background-color: var(--paper); background-image: linear-gradient(to right, #29292916 1px, transparent 1px), linear-gradient(to bottom, #29292916 1px, transparent 1px); background-size: 4.5rem 4.5rem; }
+    .slide[hidden] { display: none; }
+    h1, h2, h3, p { margin: 0; }
+    .eyebrow { font-size: clamp(.75rem, 1.15vw, 1rem); font-weight: 700; letter-spacing: .14em; }
+    h1, h2, h3 { font-family: Georgia, "Songti SC", serif; }
+    h1 { font-size: clamp(2rem, 5.8vw, 5rem); line-height: 1.14; }
+    h2 { margin-top: .65em; font-size: clamp(1.6rem, 3.4vw, 3rem); }
+    h3 { font-size: clamp(1.2rem, 2.1vw, 1.8rem); }
+    p { font-size: clamp(1rem, 1.5vw, 1.3rem); line-height: 1.6; }
+    .cover { display: grid; grid-template-columns: 1.1fr .9fr; gap: 10%; align-items: center; height: 82%; }
+    .cover p { margin-top: 1.2rem; }
+    .note { position: relative; padding: clamp(1.1rem, 2.4vw, 2rem); background: var(--accent); box-shadow: .5rem .6rem 0 #29292924; }
+    .note::before { content: ""; position: absolute; top: -.7rem; left: 36%; width: 28%; height: 1.4rem; background: #f4eddfe0; transform: rotate(-3deg); }
+    .note p { margin-top: .6rem; }
+    .cover-note { transform: rotate(3deg); }
+    .cover-note > * { transform: rotate(-3deg); }
+    .notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3%; align-items: center; margin-top: 8%; }
+    .notes .note:nth-child(1) { transform: rotate(-2deg); }
+    .notes .note:nth-child(1) > * { transform: rotate(2deg); }
+    .notes .note:nth-child(3) { transform: rotate(2deg); }
+    .notes .note:nth-child(3) > * { transform: rotate(-2deg); }
+    .note strong { display: block; margin-bottom: .8rem; font-size: 1rem; }
+    .figure { display: grid; grid-template-columns: 1.2fr .8fr; gap: 6%; align-items: center; margin-top: 6%; }
+    .figure svg { width: 100%; height: auto; }
+    .figure .note { background: var(--paper); border: 2px solid var(--ink); }
+    #slide-status { position: absolute; right: 7%; bottom: 3%; font-size: .9rem; font-variant-numeric: tabular-nums; }
+    @media (prefers-reduced-motion: no-preference) { .slide:not([hidden]) .entry { animation: reveal .4s ease both; } @keyframes reveal { from { opacity: 0; } to { opacity: 1; } } }
+    @media (max-width: 40rem) { .slide { aspect-ratio: auto; min-height: 100vh; padding: 2rem 1.5rem 5rem; background-size: 2.5rem 2.5rem; } .cover, .figure, .notes { grid-template-columns: 1fr; gap: 1.5rem; height: auto; margin-top: 2rem; } .cover-note { margin-top: 1rem; } .notes .note { transform: none !important; } .notes .note > * { transform: none !important; } #slide-status { right: 1.5rem; bottom: 1.2rem; } }
+    @media print { .deck { width: 100%; } .slide, .slide[hidden] { display: block; break-after: page; } #slide-status { display: none; } }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="汇报页面">
+    <section class="slide" aria-labelledby="paper-title-1">
+      <div class="eyebrow">汇报主题 / 01</div>
+      <div class="cover entry">
+        <div><h1 id="paper-title-1">在此填写<br>汇报标题</h1><p>用一句话介绍本次汇报的主题。</p></div>
+        <aside class="note cover-note"><h3>本次关注</h3><p>填写需要听众理解的核心内容。</p></aside>
+      </div>
+    </section>
+    <section class="slide" aria-labelledby="paper-title-2" hidden>
+      <div class="eyebrow">过程 / 02</div><h2 id="paper-title-2">用三个步骤讲清过程</h2>
+      <div class="notes entry">
+        <article class="note"><strong>01</strong><h3>起点</h3><p>填写背景或输入。</p></article>
+        <article class="note"><strong>02</strong><h3>行动</h3><p>填写关键操作。</p></article>
+        <article class="note"><strong>03</strong><h3>结果</h3><p>填写可以观察的结果。</p></article>
+      </div>
+    </section>
+    <section class="slide" aria-labelledby="paper-title-3" hidden>
+      <div class="eyebrow">证据 / 03</div><h2 id="paper-title-3">展示一项关键证据</h2>
+      <div class="figure entry">
+        <svg viewBox="0 0 560 260" role="img" aria-label="用于替换为项目证据的示意区域"><rect x="3" y="3" width="554" height="254" fill="#f4eddf" stroke="#292929" stroke-width="3"/><path d="M55 202h450M85 205V55" fill="none" stroke="#292929" stroke-width="3"/><path d="M85 170L190 145L295 155L400 95L500 75" fill="none" stroke="#292929" stroke-width="5"/><circle cx="400" cy="95" r="9" fill="#ffd54f" stroke="#292929" stroke-width="3"/></svg>
+        <aside class="note"><h3>观察重点</h3><p>替换为与图表或截图对应的说明，并注明来源。</p></aside>
+      </div>
+    </section>
+    <output id="slide-status" aria-label="页码" aria-live="polite" aria-atomic="true"></output>
+  </main>
+  <script>
+    const slides = Array.from(document.querySelectorAll(".deck > section"));
+    const status = document.querySelector("#slide-status");
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      if (index < 0 || index >= slides.length) {
+        return;
+      }
+      currentIndex = index;
+      slides.forEach((slide, position) => {
+        slide.hidden = position !== index;
+      });
+      status.textContent = `${index + 1} / ${slides.length}`;
+      window.scrollTo(0, 0);
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) {
+        return;
+      }
+      if (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable]")) {
+        return;
+      }
+      const key = event.key.toLowerCase();
+      if (key === "a" || key === "arrowleft") {
+        showSlide(currentIndex - 1);
+      } else if (key === "d" || key === "arrowright") {
+        showSlide(currentIndex + 1);
+      } else {
+        return;
+      }
+      event.preventDefault();
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>
