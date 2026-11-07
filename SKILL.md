@@ -14,6 +14,8 @@ description: 为学生课程设计和工作项目设计汇报逐字稿、演示�
 - 学生课程设计、中期检查或期末答辩，阅读 [学生课程设计汇报](references/script/course-project.md)。
 - 工作项目进度、成果验收或技术评审，阅读 [工作项目汇报](references/script/work-project.md)。
 
+逐字稿按意思分段，不按页分段，正文里不写页码；需要配页面时，页码单独占一行。问答备稿和正文分开写，按 [问答备稿](references/script/qa.md) 来。
+
 ## HTML 设计美化
 
 阅读 [HTML 工作流程](references/html/workflow.md)。制作新汇报页时，先按 [风格选择](references/html/style-selection.md) 提出两到三个方案让用户选定，再使用 [HTML 基础模板](assets/html/base.html) 开始制作。美化已有页面时，以现有文件和用户指定的范围为准。
@@ -24,8 +26,10 @@ description: 为学生课程设计和工作项目设计汇报逐字稿、演示�
 
 ## 同时交付稿件和 HTML
 
-用同一份页面提纲组织两份交付物。记录每页标题、听众需要理解的结论、要展示的证据或操作、预计用时。稿件负责讲解和过渡，HTML 展示台上需要指给听众看的信息。交付前逐页核对顺序、术语、数字和演示步骤，并运行 HTML 的单文件与翻页验收。
+先按 [稿件流程](references/script/workflow.md) 把段落排出来，再按段落切页面：一段对应一页，或两段共用一页，每页只放一个结论。稿件负责讲解和过渡，页面只放需要指给听众看的证据和操作。
+
+交付前核对三件事：数字在两边一致、术语写法一致、稿件里的演示动作和页面上的操作对得上。
 
 ## 示例
 
-需要对照成品形态时，阅读 [示例讲稿](examples/report-helper-demo/讲稿.md) 与配套的 `examples/report-helper-demo/汇报页.html`。暖纸手记风的成品见 `examples/warm-paper-demo/汇报页.html`，自然多色风（多色选择，示例用第 15 套暖粉薄荷）的成品见 `examples/natural-multi-demo/汇报页.html`。示例只用于对照格式与页面组织方式，内容以本次项目资料为准。
+需要对照成品形态时，稿件看 [示例逐字稿](examples/script-demo/逐字稿.md)，页面看 `examples/report-helper-demo/汇报页.html`。暖纸手记风的成品见 `examples/warm-paper-demo/汇报页.html`，自然多色风（多色选择，示例用第 15 套暖粉薄荷）的成品见 `examples/natural-multi-demo/汇报页.html`。示例只用于对照格式与页面组织方式，内容以本次项目资料为准。

@@ -27,7 +27,7 @@
 - 暖纸手记风读取 [暖纸手记风设计规则](styles/warm-paper/STYLE.md)，可参考 `assets/html/styles/warm-paper/deck.html`，成品形态见 `examples/warm-paper-demo/汇报页.html`。
 - 自然多色风（多色选择）读取 [自然多色风设计规则](styles/natural-multi/STYLE.md) 与 [色板表](styles/natural-multi/palettes.md)，先定下用哪一套配色再做页面；可参考 `assets/html/styles/natural-multi/deck.html`，成品形态见 `examples/natural-multi-demo/汇报页.html`。
 
-可直接用于成品的风格素材按主题放在 `assets/html/styles/<style-name>/`。模板提供基础动效和占位内容，制作成品时结合选定风格规则与本次内容调整。共享结构和翻页交互可复用基础模板。完整的稿件和页面示例见 `examples/report-helper-demo/`。
+可直接用于成品的风格素材按主题放在 `assets/html/styles/<style-name>/`。模板提供基础动效和占位内容，制作成品时结合选定风格规则与本次内容调整。共享结构和翻页交互可复用基础模板。页面示例见 `examples/report-helper-demo/`，配套稿件示例见 `examples/script-demo/逐字稿.md`。
 
 ## 交付前：强制内联 GSAP
 

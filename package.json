@@ -2,7 +2,14 @@
   "name": "report-helper",
   "version": "1.0.0",
   "private": true,
-  "description": "汇报页单文件与翻页验收命令",
+  "description": "把一个项目的资料变成答辩逐字稿和单文件 HTML 汇报页的 agent skill，附单文件验收与 GSAP 内联脚本",
+  "keywords": [
+    "skill",
+    "presentation",
+    "html-deck",
+    "speech-script",
+    "gsap"
+  ],
   "bin": {
     "report-deck-check": "scripts/check-deck.mjs",
     "report-embed-gsap": "scripts/embed-gsap.mjs"
@@ -10,6 +17,9 @@
   "scripts": {
     "check": "node scripts/check-deck.mjs",
     "embed-gsap": "node scripts/embed-gsap.mjs"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
     "playwright-core": "^1.65.0"
