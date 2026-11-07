@@ -120,7 +120,49 @@ async (page) => {
       await checkPage(0, total, "滚轮向下后", true);
     }
   }
+  // 动效校验：允许动效时 GSAP 必须已内联，每页播完后正文、图注都得可见。
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.reload();
+  requireCondition(await page.evaluate(() => typeof window.gsap !== "undefined"),
+    "页面没有内联 GSAP，请先运行 scripts/embed-gsap.mjs。");
+  const motionTotal = await slides.count();
+  for (let index = 0; index < motionTotal; index += 1) {
+    if (index > 0) {
+      await page.keyboard.press("d");
+    }
+    const invisible = await slides.nth(index).evaluate(async (slide) => {
+      const collect = () => [...slide.querySelectorAll("h1, h2, h3, h4, p, li, dt, dd, figcaption, td, th")]
+        .filter((node) => node.textContent.trim().length > 0)
+        .filter((node) => {
+          let cursor = node;
+          let opacity = 1;
+          while (cursor && cursor !== document.documentElement) {
+            const style = getComputedStyle(cursor);
+            if (style.visibility === "hidden" || style.display === "none") {
+              return true;
+            }
+            opacity *= Number(style.opacity);
+            cursor = cursor.parentElement;
+          }
+          const rect = node.getBoundingClientRect();
+          return opacity < 0.1 || (rect.width === 0 && rect.height === 0);
+        })
+        .map((node) => node.textContent.trim().slice(0, 12));
+
+      const started = Date.now();
+      let pending = collect();
+      while (pending.length > 0 && Date.now() - started < 5000) {
+        await new Promise((resolve) => setTimeout(resolve, 120));
+        pending = collect();
+      }
+      return pending;
+    });
+    requireCondition(invisible.length === 0,
+      `第 ${index + 1} 页动效结束后仍有内容不可见：${invisible.join("、")}。`);
+  }
+
   checkDependencies();
   requireCondition(errors.length === 0, errors.join("\n"));
-  return "通过单文件与翻页验收：离线加载、单页显示、键盘翻页、首尾边界、右下角页码、滚轮与投影尺寸。";
+  return "通过单文件与翻页验收：离线加载、单页显示、键盘翻页、首尾边界、右下角页码、滚轮、投影尺寸与 GSAP 动效。";
 }

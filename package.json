@@ -1,0 +1,17 @@
+{
+  "name": "report-helper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "汇报页单文件与翻页验收命令",
+  "bin": {
+    "report-deck-check": "scripts/check-deck.mjs",
+    "report-embed-gsap": "scripts/embed-gsap.mjs"
+  },
+  "scripts": {
+    "check": "node scripts/check-deck.mjs",
+    "embed-gsap": "node scripts/embed-gsap.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "^1.65.0"
+  }
+}
