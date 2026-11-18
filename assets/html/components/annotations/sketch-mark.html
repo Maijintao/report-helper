@@ -1,0 +1,31 @@
+<style>
+  .sketch-mark {
+    --mark-color: #e56c4e;
+    position: relative;
+    display: inline-block;
+    padding: .08em .22em;
+    color: inherit;
+    line-height: 1.25;
+    white-space: nowrap;
+    isolation: isolate;
+  }
+  .sketch-mark__stroke {
+    position: absolute;
+    inset: -.12em -.12em -.1em;
+    width: calc(100% + .24em);
+    height: calc(100% + .22em);
+    overflow: visible;
+    color: var(--mark-color);
+    pointer-events: none;
+  }
+  .sketch-mark__stroke path { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .sketch-mark__stroke path + path { opacity: .52; stroke-width: 1; }
+</style>
+
+<span class="sketch-mark" style="font: 600 32px/1.25 system-ui, sans-serif; --mark-color: #e56c4e;">
+  重点内容
+  <svg class="sketch-mark__stroke" viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M101 5 C61 2 17 7 9 23 C0 40 39 52 91 51 C141 53 187 46 192 30 C196 15 158 5 111 4" />
+    <path d="M112 3 C153 2 188 12 194 25 C199 39 169 48 131 51" />
+  </svg>
+</span>

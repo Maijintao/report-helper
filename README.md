@@ -10,7 +10,7 @@
 
 这个 skill 把它们绑在一起：
 
-- **逐字稿**：按意思分段（不按页），套一套 14 段的论证骨架，末尾附问答备稿。目标只有一个——照着念就能讲。
+- **逐字稿**：按听众和汇报目的组织证据，安排案例、过渡、演示与交接，并准备答辩问答。
 - **HTML 汇报页**：单文件、断网能开、键盘翻页、每页带 GSAP 动效，六套现成风格。
 
 两者可以单独要，也可以从同一份资料一起出。
@@ -31,6 +31,8 @@ agent 会读 `SKILL.md` 里的路由，按场景加载 `references/` 下对应�
 
 不装 agent 也能用。`assets/html/styles/<风格>/deck.html` 都是自带 GSAP 的单文件，双击就能翻页，替换内容即可。
 
+时间线和图表可从 [汇报组件目录](references/html/components/index.md) 按用途选择。组件文件包含样式、示例内容和动画函数；把需要的部分放进汇报文件，并按实际资料修改。
+
 ## 产出物长什么样
 
 | 类型 | 示例 |
@@ -38,7 +40,7 @@ agent 会读 `SKILL.md` 里的路由，按场景加载 `references/` 下对应�
 | 逐字稿（含问答备稿） | [`examples/script-demo/逐字稿.md`](examples/script-demo/逐字稿.md) |
 | 暖纸手记风页面 | [`examples/warm-paper-demo/汇报页.html`](examples/warm-paper-demo/汇报页.html) |
 | 自然多色风页面 | [`examples/natural-multi-demo/汇报页.html`](examples/natural-multi-demo/汇报页.html) |
-| 基础演示页面 | [`examples/report-helper-demo/汇报页.html`](examples/report-helper-demo/汇报页.html) |
+| 技术交付汇报 | [离线 HTML](examples/report-helper-demo/汇报页.html) · [配套逐字稿](examples/report-helper-demo/逐字稿.md) · [版式说明](references/html/page-layouts.md) |
 
 ## 目录结构
 
@@ -47,12 +49,14 @@ SKILL.md                  入口：什么场景读哪份规则
 references/
   script/                 逐字稿：流程、学生场景、工作场景、问答、时长预算
   html/                   汇报页：工作流程、设计基准、动效、常见问题、风格选择
+  html/components/        组件目录与使用说明
   html/styles/<风格>/      每套风格的规则与色板
 assets/html/
   base.html               基础模板（结构 + 翻页 + 时间线）
   deck-core.js            翻页与动效的参考实现
+  components/             按用途分类的时间线和图表组件
   styles/<风格>/deck.html  六套可离线打开的成品模板
-  vendor/                 GSAP 发行文件（内联用）
+  vendor/                 GSAP、ECharts 和 Zdog 发行文件（内联用）
 scripts/
   embed-gsap.mjs          把 GSAP 整段内联进成品
   check-deck.mjs          单文件与翻页验收
@@ -81,12 +85,16 @@ examples/                 成品示例
 ## 验收（改模板或脚本时跑）
 
 ```sh
-npm install          # 只装 playwright-core
+npm install          # 安装依赖
 node scripts/check-deck.mjs 你的汇报页.html
+node scripts/check-deck.mjs examples/report-helper-demo/汇报页.html --check-font-sizes
 node scripts/embed-gsap.mjs 你的汇报页.html
+npm run test:components
 ```
 
 `check-deck` 会断网重开页面，在 1440×900、1280×720、390×844 三种尺寸下实际发按键，检查：单页显示、首尾边界、右下角页码、投影尺寸不出现纵向滚动、滚轮不翻页、没有外部资源请求；随后在允许动效的条件下重跑一遍，确认 GSAP 已内联、每页播完后内容完整可见。
+
+加上 `--check-font-sizes` 后，还会按 [投影字号标记](references/html/workflow.md#单文件与翻页验收) 检查标题、正文和图注。
 
 `embed-gsap` 负责把 `assets/html/vendor/gsap-3.13.0.min.js` 整段插进成品，保留许可声明，并检查有没有真正的时间线调用。
 
@@ -99,5 +107,7 @@ node scripts/embed-gsap.mjs 你的汇报页.html
 ## 许可与致谢
 
 - 内联的 GSAP 3.13.0 归 GreenSock 所有，按 [GSAP 标准许可](https://gsap.com/standard-license) 使用，发行文件里的许可声明原样保留。
+- ECharts 按 Apache License 2.0 使用，发行文件里的许可声明原样保留。
+- Zdog 按 MIT License 使用，发行文件里的许可声明原样保留。
 - 自然多色风的 17 套配色解析自 [happyhues](https://www.happyhues.co/)。
 - 动效写法参考 GreenSock 官方的 [gsap-skills](https://github.com/greensock/gsap-skills)（MIT）。

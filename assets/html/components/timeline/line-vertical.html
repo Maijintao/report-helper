@@ -1,0 +1,27 @@
+<style>
+  .timeline-line { --timeline-line-ink: #202c29; --timeline-line-accent: #486e59; color: var(--timeline-line-ink); font-family: system-ui, sans-serif; }
+  .timeline-line__list { position: relative; margin: 0; padding: 0 0 0 2.5rem; list-style: none; }
+  .timeline-line__list::before { content: ''; position: absolute; left: .57rem; top: .8rem; bottom: 1.4rem; border-left: 2px solid var(--timeline-line-accent); }
+  .timeline-line__item { position: relative; display: grid; grid-template-columns: 5rem 1fr; gap: 1.5rem; padding: 1rem 0; border-bottom: 1px solid #202c294d; }
+  .timeline-line__item:last-child { border-bottom: 0; }
+  .timeline-line__item::before { content: ''; position: absolute; top: 1.3rem; left: -2.5rem; width: 1.1rem; height: 1.1rem; border: 2px solid var(--timeline-line-accent); border-radius: 50%; background: var(--timeline-line-surface, #f7f8f5); }
+  .timeline-line__date { padding-top: .2rem; font-weight: 700; font-size: 1rem; }
+  .timeline-line__title { margin: 0; font-size: clamp(1.25rem, 1.9vw, 1.65rem); line-height: 1.3; }
+  .timeline-line__text { margin: .35rem 0 0; font-size: clamp(1.05rem, 1.5vw, 1.3rem); line-height: 1.5; }
+  @media (max-width: 30rem) { .timeline-line__item { grid-template-columns: 1fr; gap: .35rem; } }
+</style>
+
+<div class="timeline-line">
+  <ol class="timeline-line__list" aria-label="项目进程示例">
+    <li class="timeline-line__item"><span class="timeline-line__date">3 月</span><div><h3 class="timeline-line__title">明确问题</h3><p class="timeline-line__text">整理需求与研究范围。</p></div></li>
+    <li class="timeline-line__item"><span class="timeline-line__date">4 月</span><div><h3 class="timeline-line__title">构思方案</h3><p class="timeline-line__text">比较思路，确定方向。</p></div></li>
+    <li class="timeline-line__item"><span class="timeline-line__date">5 月</span><div><h3 class="timeline-line__title">制作验证</h3><p class="timeline-line__text">完成原型，收集反馈。</p></div></li>
+    <li class="timeline-line__item"><span class="timeline-line__date">6 月</span><div><h3 class="timeline-line__title">整理成果</h3><p class="timeline-line__text">归纳结果，准备展示。</p></div></li>
+  </ol>
+</div>
+
+<script>
+  function animateTimelineLine(timeline, root, position) {
+    timeline.from(root.querySelectorAll('.timeline-line__item'), { autoAlpha: 0, x: -18, stagger: 0.13, duration: 0.45, ease: 'power3.out' }, position);
+  }
+</script>

@@ -1,0 +1,96 @@
+<style>
+  .timeline-cards, .timeline-cards * { box-sizing: border-box; }
+  .timeline-cards {
+    position: relative;
+    width: min(100%, 470px);
+    margin: 0 auto;
+    padding: 22px 16px;
+    color: #25242b;
+    font-family: system-ui, 'PingFang SC', sans-serif;
+  }
+  .timeline-cards__links { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .timeline-cards__list { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 7px; margin: 0; padding: 0; list-style: none; }
+  .timeline-cards__item {
+    --card-accent: #e9871d;
+    --card-tint: #fff7eb;
+    position: relative;
+    z-index: 1;
+    justify-self: start;
+    width: min(45%, 190px);
+    padding: 9px;
+    border: 1px solid #eeeeed;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 5px 14px #25242b1c, 0 1px 3px #25242b0c;
+    transform: rotate(4deg);
+  }
+  .timeline-cards__item:nth-child(even) { justify-self: end; transform: rotate(-4deg); }
+  .timeline-cards__item:nth-child(4n + 2), .timeline-cards__item:nth-child(4n + 5) { --card-accent: #236bf0; --card-tint: #ecf4ff; }
+  .timeline-cards__item:nth-child(4n + 3) { --card-accent: #ad36df; --card-tint: #faf1ff; }
+  .timeline-cards__pin { position: absolute; top: -10px; left: 50%; width: 17px; height: 20px; color: var(--card-accent); transform: translateX(-50%); filter: drop-shadow(0 2px 2px #25242b26); }
+  .timeline-cards__face { min-height: 77px; padding: 12px 11px 10px; border-radius: 7px; background: var(--card-tint); }
+  .timeline-cards__number { display: block; margin-bottom: 6px; color: var(--card-accent); font-size: 17px; line-height: 1; font-weight: 750; font-variant-numeric: tabular-nums; }
+  .timeline-cards__title { margin: 0; font-size: 13px; line-height: 1.3; font-weight: 750; }
+  .timeline-cards__description { margin: 4px 0 0; color: #62616a; font-size: 11px; line-height: 1.45; }
+  @media (max-width: 360px) { .timeline-cards { padding-inline: 8px; } .timeline-cards__item { width: 46%; } .timeline-cards__face { padding: 10px 8px; } }
+</style>
+
+<div class="timeline-cards">
+  <svg class="timeline-cards__links" aria-hidden="true"></svg>
+  <ol class="timeline-cards__list" aria-label="步骤示例">
+    <li class="timeline-cards__item"><svg class="timeline-cards__pin" viewBox="0 0 20 24" aria-hidden="true"><path d="M7 3.5h6l-.7 5 2.7 3.5v1.5H11v6l-1 2-1-2v-6H5v-1.5l2.7-3.5Z" fill="currentColor" stroke="#fff" stroke-width=".8"/></svg><div class="timeline-cards__face"><span class="timeline-cards__number">01</span><h3 class="timeline-cards__title">步骤一</h3><p class="timeline-cards__description">填写简短的步骤说明。</p></div></li>
+    <li class="timeline-cards__item"><svg class="timeline-cards__pin" viewBox="0 0 20 24" aria-hidden="true"><path d="M7 3.5h6l-.7 5 2.7 3.5v1.5H11v6l-1 2-1-2v-6H5v-1.5l2.7-3.5Z" fill="currentColor" stroke="#fff" stroke-width=".8"/></svg><div class="timeline-cards__face"><span class="timeline-cards__number">02</span><h3 class="timeline-cards__title">步骤二</h3><p class="timeline-cards__description">填写简短的步骤说明。</p></div></li>
+    <li class="timeline-cards__item"><svg class="timeline-cards__pin" viewBox="0 0 20 24" aria-hidden="true"><path d="M7 3.5h6l-.7 5 2.7 3.5v1.5H11v6l-1 2-1-2v-6H5v-1.5l2.7-3.5Z" fill="currentColor" stroke="#fff" stroke-width=".8"/></svg><div class="timeline-cards__face"><span class="timeline-cards__number">03</span><h3 class="timeline-cards__title">步骤三</h3><p class="timeline-cards__description">填写简短的步骤说明。</p></div></li>
+    <li class="timeline-cards__item"><svg class="timeline-cards__pin" viewBox="0 0 20 24" aria-hidden="true"><path d="M7 3.5h6l-.7 5 2.7 3.5v1.5H11v6l-1 2-1-2v-6H5v-1.5l2.7-3.5Z" fill="currentColor" stroke="#fff" stroke-width=".8"/></svg><div class="timeline-cards__face"><span class="timeline-cards__number">04</span><h3 class="timeline-cards__title">步骤四</h3><p class="timeline-cards__description">填写简短的步骤说明。</p></div></li>
+    <li class="timeline-cards__item"><svg class="timeline-cards__pin" viewBox="0 0 20 24" aria-hidden="true"><path d="M7 3.5h6l-.7 5 2.7 3.5v1.5H11v6l-1 2-1-2v-6H5v-1.5l2.7-3.5Z" fill="currentColor" stroke="#fff" stroke-width=".8"/></svg><div class="timeline-cards__face"><span class="timeline-cards__number">05</span><h3 class="timeline-cards__title">步骤五</h3><p class="timeline-cards__description">填写简短的步骤说明。</p></div></li>
+  </ol>
+</div>
+
+<script>
+  function createTimelineCards(root) {
+    if (!root) throw new Error('交错卡片时间线需要组件根元素');
+    const list = root.querySelector('.timeline-cards__list');
+    const links = root.querySelector('.timeline-cards__links');
+    if (!list || !links) throw new Error('交错卡片时间线需要列表和连接线容器');
+    const resizeObserver = new ResizeObserver(draw);
+    const mutationObserver = new MutationObserver(observeItems);
+    function draw() {
+      const container = root.getBoundingClientRect();
+      if (container.width === 0 || container.height === 0) return;
+      links.setAttribute('viewBox', `0 0 ${container.width} ${container.height}`);
+      links.replaceChildren();
+      const cards = [...list.children];
+      cards.slice(0, -1).forEach((card, index) => {
+        const start = card.getBoundingClientRect();
+        const end = cards[index + 1].getBoundingClientRect();
+        const forward = end.left > start.left;
+        const x1 = (forward ? start.right : start.left) - container.left;
+        const y1 = start.top + start.height * .65 - container.top;
+        const x2 = (forward ? end.left : end.right) - container.left;
+        const y2 = end.top + end.height * .35 - container.top;
+        const middle = (x1 + x2) / 2;
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M ${x1} ${y1} C ${middle} ${y1}, ${middle} ${y2}, ${x2} ${y2}`);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', '#d0d0d3');
+        path.setAttribute('stroke-width', '1.4');
+        path.setAttribute('stroke-dasharray', '3 4');
+        links.append(path);
+      });
+    }
+    function observeItems() {
+      resizeObserver.disconnect();
+      resizeObserver.observe(root);
+      [...list.children].forEach((item) => resizeObserver.observe(item));
+      draw();
+    }
+    mutationObserver.observe(list, { childList: true, subtree: true, characterData: true });
+    observeItems();
+    return { refresh: observeItems, dispose() { mutationObserver.disconnect(); resizeObserver.disconnect(); links.replaceChildren(); } };
+  }
+  function animateTimelineCards(timeline, root, position) {
+    timeline.from(root.querySelector('.timeline-cards__links'), { autoAlpha: 0, duration: .35 }, position);
+    timeline.from(root.querySelectorAll('.timeline-cards__item'), { autoAlpha: 0, y: 12, stagger: .12, duration: .45, ease: 'power3.out' }, '<');
+  }
+  document.querySelectorAll('.timeline-cards').forEach((root) => { root.timelineCardsController = createTimelineCards(root); });
+</script>

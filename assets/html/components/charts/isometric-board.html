@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>立体数据台组件</title>
+  <style>
+    .iso-board, .iso-board * { box-sizing: border-box; }
+    body { margin: 0; padding: clamp(1rem, 3vw, 3rem); background: #fff; color: #353734; font-family: ui-monospace, 'PingFang SC', monospace; }
+    .iso-board { width: min(100%, 900px); margin: 0 auto; padding: clamp(1.2rem, 3vw, 2rem); overflow: hidden; border-radius: 1.5rem; background: #eeefed; }
+    .iso-board__header, .iso-board__footer { display: flex; justify-content: space-between; align-items: center; gap: 1rem; color: #5f635e; font-size: clamp(.65rem, 1vw, .8rem); font-weight: 700; letter-spacing: .08em; }
+    .iso-board__scene { position: relative; width: 100%; }
+    .iso-board__plot { width: 100%; }
+    .iso-board__plot svg { display: block; width: 100%; height: auto; }
+    .iso-board__controls { position: absolute; inset: 0; pointer-events: none; }
+    .iso-board__controls button { position: absolute; pointer-events: auto; width: 9%; height: 7%; padding: 0; border: 0; background: transparent; color: #40463f; font: 700 clamp(.6rem, 1vw, .9rem) ui-monospace, monospace; transform: translate(-50%, -50%) rotate(25deg) skew(-15deg); cursor: pointer; }
+    .iso-board__controls button[aria-pressed='true'] { color: #101310; text-decoration: underline; text-underline-offset: .2em; }
+    .iso-board__controls button:focus-visible { outline: 2px solid #31599a; outline-offset: 3px; }
+    .iso-board__footer { align-items: end; }
+    .iso-board__summary { text-align: right; line-height: 1.7; }
+    .iso-board__source { color: #737972; font-size: .68rem; }
+    @media (max-width: 40rem) { body { padding: .75rem; } .iso-board { padding: 1rem; border-radius: 1rem; } .iso-board__controls button { font-size: .6rem; } }
+  </style>
+</head>
+<body>
+  <article class="iso-board" data-demo>
+    <header class="iso-board__header"><span>SaaS</span><span>METRICS BOARD</span></header>
+    <div class="iso-board__scene"><div class="iso-board__plot"><svg width="720" height="500" role="img" aria-label="立体数据台"></svg></div><div class="iso-board__controls" aria-label="选择时间范围"></div></div>
+    <footer class="iso-board__footer"><span>选择时间范围</span><div class="iso-board__summary"><div class="iso-board__range"></div><div class="iso-board__source">示例数据</div></div></footer>
+  </article>
+  <script src="../../vendor/zdog-1.1.3.min.js"></script>
+  <script>
+    function createIsometricBoard(root, config) {
+      if (!root || !Array.isArray(config.categories) || !config.categories.length || config.categories.length > 8 || !Array.isArray(config.ranges) || config.ranges.length !== 3) throw new Error('立体数据台需要一至八个类别和三个时间范围');
+      config.ranges.forEach((range) => {
+        if (!range.name || !Number.isFinite(range.baseline) || range.baseline <= 0 || !Array.isArray(range.values) || range.values.length !== config.categories.length || range.values.some((value) => !Number.isFinite(value) || value < 0)) throw new Error('时间范围需要名称、基准值和对应的非负数值');
+      });
+      const svg = root.querySelector('.iso-board__plot svg');
+      const controls = root.querySelector('.iso-board__controls');
+      const summary = root.querySelector('.iso-board__range');
+      const illustration = new Zdog.Illustration({ element: svg, rotate: { x: -.48, y: .68 }, zoom: 1 });
+      const stroke = '#858984';
+      function box(parent, x, y, z, width, height, depth, topColor = '#fdfdfc') {
+        const group = new Zdog.Anchor({ addTo: parent, translate: { x, y, z } });
+        new Zdog.Box({ addTo: group, width, height, depth, stroke: false, color: '#f8f9f7', topFace: topColor, leftFace: '#eeefed', rightFace: '#e4e7e2', frontFace: '#fafbf9', rearFace: '#e4e7e2', bottomFace: '#dedfdd' });
+        const x1 = -width / 2, x2 = width / 2, y1 = -height / 2, y2 = height / 2, z1 = -depth / 2, z2 = depth / 2;
+        new Zdog.Shape({ addTo: group, path: [{ x: x1, y: y1, z: z1 }, { x: x2, y: y1, z: z1 }, { x: x2, y: y2, z: z1 }, { x: x1, y: y2, z: z1 }, { x: x1, y: y1, z: z1 }, { x: x1, y: y1, z: z2 }, { x: x2, y: y1, z: z2 }, { x: x2, y: y2, z: z2 }, { x: x1, y: y2, z: z2 }, { x: x1, y: y1, z: z2 }, { move: { x: x2, y: y1, z: z1 } }, { x: x2, y: y1, z: z2 }, { move: { x: x2, y: y2, z: z1 } }, { x: x2, y: y2, z: z2 }, { move: { x: x1, y: y2, z: z1 } }, { x: x1, y: y2, z: z2 }], closed: false, stroke: 1, color: stroke });
+        return group;
+      }
+      box(illustration, 0, 80, 0, 440, 16, 250);
+      box(illustration, 28, 14, -88, 22, 116, 14, '#f5f6f4');
+      box(illustration, 28, -80, -88, 262, 112, 12);
+      box(illustration, 28, -80, -80, 242, 92, 3, '#eef1eb');
+      box(illustration, -15, 65, -5, 335, 10, 52);
+      const buttonAnchors = [-100, -5, 90].map((x) => {
+        box(illustration, x, 66, 77, 64, 7, 29);
+        return new Zdog.Anchor({ addTo: illustration, translate: { x, y: 61, z: 77 } });
+      });
+      const origin = new Zdog.Anchor({ addTo: illustration, translate: { x: -82, y: -110, z: -77 } });
+      const horizontal = new Zdog.Anchor({ addTo: illustration, translate: { x: -81, y: -110, z: -77 } });
+      const vertical = new Zdog.Anchor({ addTo: illustration, translate: { x: -82, y: -109, z: -77 } });
+      let bars = new Zdog.Anchor({ addTo: illustration });
+      let activeIndex = 1;
+      const buttons = config.ranges.map((range, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = range.name;
+        button.addEventListener('click', () => selectRange(index));
+        controls.append(button);
+        return button;
+      });
+      function addScreenText(total, change, rangeName) {
+        const point = origin.renderOrigin, right = horizontal.renderOrigin, down = vertical.renderOrigin;
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        group.setAttribute('transform', `matrix(${right.x - point.x} ${right.y - point.y} ${down.x - point.x} ${down.y - point.y} ${point.x} ${point.y})`);
+        const lines = [{ text: `signups · ${rangeName}`, y: 4, size: 9, color: '#858b83' }, { text: new Intl.NumberFormat('zh-CN').format(total), y: 35, size: 29, color: '#343834', className: 'iso-board__total' }, { text: '相较于上一周期', y: 53, size: 8, color: '#878d85' }, { text: `${change >= 0 ? '+' : ''}${change}%`, x: 162, y: 35, size: 15, color: '#343834' }];
+        lines.forEach((line) => {
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', line.x || 0); text.setAttribute('y', line.y); text.setAttribute('fill', line.color); text.setAttribute('font-size', line.size); text.setAttribute('font-family', 'monospace'); text.setAttribute('font-weight', '700');
+          if (line.className) text.setAttribute('class', line.className);
+          text.textContent = line.text;
+          group.append(text);
+        });
+        svg.append(group);
+      }
+      function selectRange(index) {
+        if (!Number.isInteger(index) || !config.ranges[index]) throw new Error('时间范围序号无效');
+        activeIndex = index;
+        const range = config.ranges[index];
+        const total = range.values.reduce((sum, value) => sum + value, 0);
+        const change = Math.round((total - range.baseline) / range.baseline * 100);
+        const maximum = Math.max(...range.values, 1);
+        bars.remove();
+        bars = new Zdog.Anchor({ addTo: illustration });
+        range.values.forEach((value, valueIndex) => {
+          const layers = value === 0 ? 0 : Math.max(1, Math.round(value / maximum * 9));
+          for (let layer = 0; layer < layers; layer += 1) box(bars, -155 + valueIndex * 40, 56 - layer * 7.5, -5, 32, 6, 31);
+        });
+        illustration.updateRenderGraph();
+        addScreenText(total, change, range.name);
+        buttonAnchors.forEach((anchor, buttonIndex) => {
+          buttons[buttonIndex].style.left = `${(anchor.renderOrigin.x / 720 + .5) * 100}%`;
+          buttons[buttonIndex].style.top = `${(anchor.renderOrigin.y / 500 + .5) * 100}%`;
+          buttons[buttonIndex].setAttribute('aria-pressed', String(buttonIndex === index));
+        });
+        svg.setAttribute('aria-label', `${range.name}，合计 ${total}；${config.categories.map((category, categoryIndex) => `${category} ${range.values[categoryIndex]}`).join('，')}`);
+        summary.textContent = `${range.name} · ${total} · ${change >= 0 ? '+' : ''}${change}%`;
+      }
+      selectRange(1);
+      return { selectRange, getState() { const range = config.ranges[activeIndex]; return { name: range.name, values: [...range.values], total: range.values.reduce((sum, value) => sum + value, 0) }; }, dispose() { controls.replaceChildren(); svg.replaceChildren(); } };
+    }
+    function animateIsometricBoard(timeline, root, position) {
+      timeline.from(root.querySelector('.iso-board__header'), { autoAlpha: 0, y: 10, duration: .4 }, position);
+      timeline.from(root.querySelector('.iso-board__plot'), { autoAlpha: 0, y: 15, duration: .6 }, '-=.15');
+    }
+    const isometricExample = { categories: ['阶段一', '阶段二', '阶段三', '阶段四', '阶段五', '阶段六', '阶段七', '阶段八'], ranges: [{ name: '7D', baseline: 650, values: [61, 76, 90, 103, 115, 126, 132, 0] }, { name: '30D', baseline: 1088, values: [94, 116, 133, 145, 167, 185, 211, 233] }, { name: '90D', baseline: 1400, values: [120, 130, 160, 180, 200, 250, 270, 300] }] };
+    document.querySelectorAll('.iso-board[data-demo]').forEach((root) => { root.chartController = createIsometricBoard(root, isometricExample); });
+  </script>
+</body>
+</html>

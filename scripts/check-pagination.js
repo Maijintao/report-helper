@@ -1,4 +1,4 @@
-async (page) => {
+async (page, { checkFontSizes = false } = {}) => {
   function requireCondition(condition, message) {
     if (!condition) {
       throw new Error(message);
@@ -32,6 +32,39 @@ async (page) => {
   const slides = deck.locator(":scope > section");
   const shownSlides = deck.locator(":scope > section:visible");
   const counter = deck.locator("#slide-status");
+
+  async function checkSlideFontSizes(index) {
+    const issues = await slides.nth(index).evaluate((slide) => {
+      const minimums = { title: 32, body: 24, caption: 18 };
+      const roles = { title: "标题", body: "正文", caption: "图注" };
+      const textNodes = document.createTreeWalker(slide, NodeFilter.SHOW_TEXT);
+      const range = document.createRange();
+      const issues = new Set();
+
+      for (let node = textNodes.nextNode(); node; node = textNodes.nextNode()) {
+        const text = node.textContent.trim().replace(/\s+/g, " ");
+        const element = node.parentElement;
+        if (!text || !(element instanceof HTMLElement)) continue;
+        const label = element.closest("[data-font-role], h1, h2, figcaption");
+        if (!label || !slide.contains(label)) continue;
+        const style = getComputedStyle(element);
+        range.selectNodeContents(node);
+        if (style.visibility !== "visible" || range.getClientRects().length === 0) continue;
+
+        const role = label.dataset.fontRole ?? (label.matches("figcaption") ? "caption" : "title");
+        if (!Object.hasOwn(minimums, role)) {
+          issues.add(`「${text.slice(0, 24)}」使用了无效的字号标记「${role}」`);
+          continue;
+        }
+        const size = Number.parseFloat(style.fontSize);
+        if (size < minimums[role]) {
+          issues.add(`${roles[role]}「${text.slice(0, 24)}」为 ${size} px，要求至少 ${minimums[role]} px`);
+        }
+      }
+      return [...issues];
+    });
+    requireCondition(issues.length === 0, `第 ${index + 1} 页在 1280 × 720 下存在字号问题。\n${issues.join("\n")}`);
+  }
 
   async function checkPage(index, total, action, projection) {
     checkDependencies();
@@ -81,6 +114,8 @@ async (page) => {
     const total = await slides.count();
     requireCondition(total > 0, "请用 .deck 下的 section 表示每张汇报页。");
     await checkPage(0, total, `${width} × ${height} 打开时`, projection);
+    const checkProjectionFonts = checkFontSizes && width === 1280;
+    if (checkProjectionFonts) await checkSlideFontSizes(0);
 
     const linkedPages = await deck.evaluate((element) => {
       const slideIds = new Set([...element.querySelectorAll(":scope > section[id]")].map((slide) => slide.id));
@@ -97,6 +132,7 @@ async (page) => {
 
     for (let index = 1; index < total; index += 1) {
       await press("d", index, total, projection);
+      if (checkProjectionFonts) await checkSlideFontSizes(index);
       await press("a", index - 1, total, projection);
       await press("ArrowRight", index, total, projection);
       await press("ArrowLeft", index - 1, total, projection);
@@ -164,5 +200,6 @@ async (page) => {
 
   checkDependencies();
   requireCondition(errors.length === 0, errors.join("\n"));
-  return "通过单文件与翻页验收：离线加载、单页显示、键盘翻页、首尾边界、右下角页码、滚轮、投影尺寸与 GSAP 动效。";
+  const checks = "通过单文件与翻页验收：离线加载、单页显示、键盘翻页、首尾边界、右下角页码、滚轮、投影尺寸与 GSAP 动效。";
+  return checkFontSizes ? `${checks}已检查 1280 × 720 的投影字号。` : checks;
 }

@@ -1,0 +1,27 @@
+<style>
+  .doodle-callout {
+    --callout-color: #d46a4c;
+    display: inline-grid;
+    grid-template-columns: 58px auto;
+    align-items: start;
+    gap: 4px;
+    max-width: 100%;
+    color: var(--callout-color);
+    font: 600 18px/1.35 system-ui, 'PingFang SC', sans-serif;
+  }
+  .doodle-callout__arrow { display: block; width: 58px; height: 65px; margin-top: 12px; overflow: visible; }
+  .doodle-callout__arrow path { fill: none; stroke: currentColor; stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
+  .doodle-callout__label { padding: .3em .12em; overflow-wrap: anywhere; }
+  .doodle-callout--right { grid-template-columns: auto 58px; }
+  .doodle-callout--right .doodle-callout__arrow { grid-column: 2; grid-row: 1; transform: scaleX(-1); }
+  .doodle-callout--right .doodle-callout__label { grid-column: 1; grid-row: 1; }
+</style>
+
+<span class="doodle-callout" style="--callout-color: #d46a4c;">
+  <svg class="doodle-callout__arrow" viewBox="0 0 58 65" aria-hidden="true">
+    <path d="M54 3 C36 4 21 12 17 26 C13 38 15 48 7 56" />
+    <path d="M5 45 C5 49 5 54 7 57 C11 55 15 51 18 48" />
+    <path d="M49 8 C34 10 24 17 21 28" opacity=".35" stroke-width="1" />
+  </svg>
+  <span class="doodle-callout__label">在这里添加说明</span>
+</span>

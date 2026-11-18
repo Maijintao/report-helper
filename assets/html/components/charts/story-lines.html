@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>叙事折线图组件</title>
+  <style>
+    .story-chart, .story-chart * { box-sizing: border-box; }
+    body { margin: 0; padding: clamp(1rem, 3vw, 3rem); background: #fff2df; color: #17162c; font-family: 'Songti SC', Georgia, serif; }
+    .story-chart { width: min(100%, 1120px); margin: 0 auto; }
+    .story-chart__header { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; text-align: center; }
+    .story-chart__title { margin: 0; font-size: clamp(1.6rem, 3.2vw, 2.9rem); font-weight: 900; line-height: 1.3; letter-spacing: -.025em; text-shadow: 1px 1px 0 #fff, 2px 2px 0 #17162c; }
+    .story-chart__title .gold { color: #efb02e; } .story-chart__title .red { color: #d4746c; }
+    .story-chart__sub { margin: .55rem 0 0; font-size: 1rem; line-height: 1.5; color: #595667; }
+    .story-chart__tag { color: #947d65; font: 700 .75rem system-ui, sans-serif; }
+    .story-chart__stack { display: grid; gap: 1rem; }
+    .story-row { display: grid; grid-template-columns: 160px minmax(0, 1fr); overflow: hidden; border: 2px solid #17162c; border-radius: 18px; background: #fffefa; box-shadow: inset 6px 0 #4b8bfa; }
+    .story-row:nth-child(2) { box-shadow: inset 6px 0 #efa92d; }
+    .story-row__identity { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .7rem; padding: 1rem; background: #e8f0ff; text-align: center; }
+    .story-row:nth-child(2) .story-row__identity { background: #fff0d2; }
+    .story-row__symbol { display: grid; place-items: center; width: 94px; height: 94px; overflow: hidden; border: 2px solid #17162c; border-radius: 50%; background: #cfe1ff; }
+    .story-row:nth-child(2) .story-row__symbol { background: #ffe1a9; }
+    .story-row__symbol svg { width: 92px; height: 92px; }
+    .story-row__name { margin: 0; font-size: 1.05rem; line-height: 1.3; font-weight: 800; }
+    .story-row__body { position: relative; min-width: 0; padding: .8rem 1.4rem .55rem; }
+    .story-row__heading { display: flex; gap: .6rem; justify-content: space-between; align-items: baseline; flex-wrap: wrap; }
+    .story-row__label { margin: 0; color: #315ba8; font-size: 1rem; font-weight: 800; }
+    .story-row:nth-child(2) .story-row__label { color: #9b5809; }
+    .story-row__note { padding: .45rem .75rem; border: 2px solid #17162c; border-radius: .6rem; background: #f8f8ff; font: 700 .8rem system-ui, sans-serif; transform: rotate(-3deg); }
+    .story-row__plot { width: 100%; height: 150px; }
+    .story-row__taxi { position: absolute; width: 58px; height: 38px; pointer-events: none; transform: translate(-40%, -75%) rotate(18deg); }
+    .story-chart__footer { margin: 1rem 0 0; color: #595667; font-size: .85rem; }
+    @media (max-width: 42rem) { .story-row { grid-template-columns: 1fr; } .story-row__identity { flex-direction: row; justify-content: flex-start; padding: .7rem 1rem; } .story-row__symbol { width: 44px; height: 44px; } .story-row__symbol svg { width: 26px; height: 26px; } .story-row__plot { height: 180px; } }
+  </style>
+</head>
+<body>
+  <article class="story-chart" data-demo>
+    <header class="story-chart__header"><div><h1 class="story-chart__title">看起来<span class="gold">最稳</span>的那条路，可能最怕<span class="red">意外</span>。</h1></div></header>
+    <div class="story-chart__stack">
+      <section class="story-row"><div class="story-row__identity"><span class="story-row__symbol" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#d8e8ff" stroke="#17162c" stroke-width="2"/><path d="M15 97q0-30 35-30t35 30" fill="#5896ef" stroke="#17162c" stroke-width="3"/><path d="M30 68q20 17 40 0v-8H30Z" fill="#ffd1a3" stroke="#17162c" stroke-width="2"/><ellipse cx="50" cy="44" rx="26" ry="30" fill="#ffd8b3" stroke="#17162c" stroke-width="3"/><path d="M24 40Q18 11 50 10q30 0 27 30-6-14-17-19-16 13-36 13Z" fill="#252138" stroke="#17162c" stroke-width="2"/><ellipse cx="40" cy="44" rx="5" ry="7" fill="#17162c"/><ellipse cx="60" cy="44" rx="5" ry="7" fill="#17162c"/><ellipse cx="50" cy="60" rx="5" ry="7" fill="#fff" stroke="#17162c" stroke-width="2"/><path d="M29 77l8-6 13 11 13-11 8 6M50 82v15" fill="none" stroke="#17162c" stroke-width="2"/></svg></span><h2 class="story-row__name">你</h2></div><div class="story-row__body"><div class="story-row__heading"><h3 class="story-row__label">公司职员 · 每月工资</h3><span class="story-row__note">新邮件　关于岗位调整的通知</span></div><div class="story-row__plot" role="img" aria-label="每月工资趋势示意"></div></div></section>
+      <section class="story-row"><div class="story-row__identity"><span class="story-row__symbol" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#ffdfa1" stroke="#17162c" stroke-width="2"/><path d="M14 97q2-30 36-30t36 30" fill="#f4b241" stroke="#17162c" stroke-width="3"/><ellipse cx="50" cy="46" rx="27" ry="29" fill="#ffd8b3" stroke="#17162c" stroke-width="3"/><path d="M23 36Q24 11 49 10q25 0 28 26Z" fill="#444e6b" stroke="#17162c" stroke-width="3"/><path d="M20 37q30-10 60 0" fill="none" stroke="#17162c" stroke-width="5" stroke-linecap="round"/><path d="M33 48q5-7 10 0M57 48q5-7 10 0M41 61q9 8 18 0" fill="none" stroke="#17162c" stroke-width="2.5" stroke-linecap="round"/><path d="M32 77l6-6 12 10 12-10 6 6M50 81v16" fill="none" stroke="#17162c" stroke-width="2"/></svg></span><h2 class="story-row__name">发小</h2></div><div class="story-row__body"><div class="story-row__heading"><h3 class="story-row__label">出租车司机 · 每天收入</h3></div><div class="story-row__plot" role="img" aria-label="每天收入趋势示意"></div><svg class="story-row__taxi" viewBox="0 0 70 42" aria-hidden="true"><path d="M8 25l6-12q2-4 8-5h22q6 0 10 7l6 7q4 1 4 7v4H6v-5q0-2 2-3Z" fill="#f7bd42" stroke="#17162c" stroke-width="2.5"/><path d="M18 21l5-10h10v10Zm18-10h8q4 0 7 6l3 4H36Z" fill="#dcecff" stroke="#17162c" stroke-width="2"/><path d="M28 8V4h12v4M10 28h50" fill="none" stroke="#17162c" stroke-width="2"/><circle cx="18" cy="33" r="5" fill="#17162c"/><circle cx="52" cy="33" r="5" fill="#17162c"/></svg></div></section>
+    </div>
+    <p class="story-chart__footer">情节与曲线为示意。</p>
+  </article>
+  <script src="../../vendor/echarts-6.min.js"></script>
+  <script>
+    function createStoryChart(root, config) {
+      if (!root) throw new Error('叙事折线图需要组件根元素');
+      const rows = [...root.querySelectorAll('.story-row')];
+      if (!Array.isArray(config.categories) || config.categories.length < 2 || !Array.isArray(config.series) || config.series.length !== rows.length) throw new Error('叙事折线图需要日期和与页面对应的数据系列');
+      config.series.forEach((series) => {
+        if (!series.name || !series.label || !series.note || !series.color || !Array.isArray(series.values) || series.values.length !== config.categories.length || series.values.some((value) => !Number.isFinite(value) || value < 0 || value > 100)) throw new Error('数据系列需要名称、颜色和 0 至 100 的数值');
+      });
+      const charts = rows.map((row, index) => {
+        const series = config.series[index];
+        row.querySelector('.story-row__name').textContent = series.name;
+        row.querySelector('.story-row__label').textContent = series.label;
+        const note = row.querySelector('.story-row__note');
+        if (note) note.textContent = series.note;
+        const plot = row.querySelector('.story-row__plot');
+        plot.setAttribute('aria-label', `${series.name}：${config.categories.map((category, categoryIndex) => `${category} ${series.values[categoryIndex]}`).join('，')}`);
+        const chart = echarts.init(plot, null, { renderer: 'svg' });
+        const outlined = { type: 'line', data: series.values, silent: true, symbol: 'none', lineStyle: { color: '#17162c', width: 8 }, z: 1 };
+        const colored = { name: series.name, type: 'line', data: series.values, symbol: series.coins ? 'circle' : 'none', symbolSize: 15, lineStyle: { color: series.color, width: 5 }, itemStyle: { color: (params) => series.coins && params.dataIndex === series.values.length - 1 ? '#ef5b58' : '#ffd14e', borderColor: '#17162c', borderWidth: 2 }, z: 2 };
+        const ending = { type: 'line', data: series.values.map((value, pointIndex) => pointIndex >= series.values.length - 2 ? value : null), symbol: 'none', lineStyle: { color: '#ef5b58', width: 5 }, silent: true, z: 3 };
+        chart.setOption({ animation: !matchMedia('(prefers-reduced-motion: reduce)').matches, animationDuration: 850, grid: { top: 10, bottom: 20, left: 30, right: 20 }, tooltip: { trigger: 'axis' }, xAxis: { type: 'category', boundaryGap: false, data: config.categories, axisLine: { lineStyle: { color: '#96909b' } }, axisTick: { show: false }, axisLabel: { show: false } }, yAxis: { type: 'value', min: 0, max: 100, splitLine: { show: false }, axisLabel: { formatter: (value) => value === 0 ? '0' : '', color: '#17162c' } }, series: series.coins ? [outlined, colored, ending] : [outlined, colored] });
+        const taxi = row.querySelector('.story-row__taxi');
+        if (taxi) {
+          const placeTaxi = () => {
+            const point = chart.convertToPixel({ xAxisIndex: 0, yAxisIndex: 0 }, [config.categories.length - 1, series.values[series.values.length - 1]]);
+            taxi.style.left = `${plot.offsetLeft + point[0]}px`;
+            taxi.style.top = `${plot.offsetTop + point[1]}px`;
+          };
+          chart.on('finished', placeTaxi);
+          placeTaxi();
+        }
+        return chart;
+      });
+      const observer = new ResizeObserver(() => charts.forEach((chart) => chart.resize()));
+      rows.forEach((row) => observer.observe(row.querySelector('.story-row__plot')));
+      return { charts, dispose() { observer.disconnect(); charts.forEach((chart) => chart.dispose()); } };
+    }
+    function animateStoryChart(timeline, root, position) {
+      timeline.from(root.querySelector('.story-chart__header'), { autoAlpha: 0, y: 14, duration: .45 }, position);
+      timeline.from(root.querySelectorAll('.story-row'), { autoAlpha: 0, x: -18, stagger: .14, duration: .5 }, '-=.15');
+    }
+    const storyExample = { categories: ['阶段 1', '阶段 2', '阶段 3', '阶段 4', '阶段 5', '阶段 6', '阶段 7', '阶段 8', '阶段 9', '阶段 10', '阶段 11', '阶段 12'], series: [{ name: '你', label: '公司职员 · 每月工资', note: '新邮件　关于岗位调整的通知', color: '#4988f4', coins: true, values: [68, 68, 68, 68, 68, 68, 68, 68, 68, 68, 68, 0] }, { name: '发小', label: '出租车司机 · 每天收入', note: '每日收入变化', color: '#f5ae36', values: [45, 64, 20, 48, 12, 69, 28, 41, 58, 36, 71, 58] }] };
+    document.querySelectorAll('.story-chart[data-demo]').forEach((root) => { root.chartController = createStoryChart(root, storyExample); });
+  </script>
+</body>
+</html>

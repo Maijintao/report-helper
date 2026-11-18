@@ -1,0 +1,24 @@
+<style>
+  .timeline-warm { --timeline-warm-ink: #141100; --timeline-warm-accent: #ffcd6b; color: var(--timeline-warm-ink); font-family: 'Songti SC', Georgia, serif; }
+  .timeline-warm__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 3rem; margin: 0; padding: 0; list-style: none; }
+  .timeline-warm__item { display: grid; grid-template-columns: 4.5rem 1fr; gap: 1.2rem; align-items: start; padding: 1rem 0; border-top: 1px solid var(--timeline-warm-ink); }
+  .timeline-warm__date { display: block; padding: .35rem; background: var(--timeline-warm-accent); text-align: center; font: 700 1rem/1.4 system-ui, sans-serif; transform: rotate(-2deg); }
+  .timeline-warm__title { margin: 0; font-size: clamp(1.25rem, 1.9vw, 1.7rem); line-height: 1.3; }
+  .timeline-warm__text { margin: .45rem 0 0; font-size: clamp(1.05rem, 1.5vw, 1.3rem); line-height: 1.6; }
+  @media (max-width: 44rem) { .timeline-warm__list { grid-template-columns: 1fr; gap: .5rem; } }
+</style>
+
+<div class="timeline-warm">
+  <ol class="timeline-warm__list" aria-label="项目进程示例">
+    <li class="timeline-warm__item"><span class="timeline-warm__date">3 月</span><div><h3 class="timeline-warm__title">明确问题</h3><p class="timeline-warm__text">整理需求与研究范围。</p></div></li>
+    <li class="timeline-warm__item"><span class="timeline-warm__date">4 月</span><div><h3 class="timeline-warm__title">构思方案</h3><p class="timeline-warm__text">比较思路，确定方向。</p></div></li>
+    <li class="timeline-warm__item"><span class="timeline-warm__date">5 月</span><div><h3 class="timeline-warm__title">制作验证</h3><p class="timeline-warm__text">完成原型，收集反馈。</p></div></li>
+    <li class="timeline-warm__item"><span class="timeline-warm__date">6 月</span><div><h3 class="timeline-warm__title">整理成果</h3><p class="timeline-warm__text">归纳结果，准备展示。</p></div></li>
+  </ol>
+</div>
+
+<script>
+  function animateTimelineWarm(timeline, root, position) {
+    timeline.from(root.querySelectorAll('.timeline-warm__item'), { autoAlpha: 0, y: 12, rotation: -2, stagger: 0.12, duration: 0.5, ease: 'power3.out' }, position);
+  }
+</script>

@@ -8,10 +8,11 @@ const here = dirname(fileURLToPath(import.meta.url));
 const skillDir = resolve(here, "..");
 const args = process.argv.slice(2);
 const noSandbox = args.includes("--no-sandbox");
+const checkFontSizes = args.includes("--check-font-sizes");
 const targets = args.filter((arg) => !arg.startsWith("--"));
 
 if (targets.length === 0) {
-  console.error("用法：node scripts/check-deck.mjs <HTML 文件> [更多文件] [--no-sandbox]");
+  console.error("用法：node scripts/check-deck.mjs <HTML 文件> [更多文件] [--check-font-sizes] [--no-sandbox]");
   process.exit(1);
 }
 
@@ -40,7 +41,7 @@ try {
     const page = await context.newPage();
     await page.goto(pathToFileURL(file).href);
     try {
-      const result = await check(page);
+      const result = await check(page, { checkFontSizes });
       console.log(`通过  ${target}  ${result}`);
     } catch (error) {
       failed += 1;

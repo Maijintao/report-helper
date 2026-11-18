@@ -18,18 +18,19 @@ description: 为学生课程设计和工作项目设计汇报逐字稿、演示�
 
 ## HTML 设计美化
 
-阅读 [HTML 工作流程](references/html/workflow.md)。制作新汇报页时，先按 [风格选择](references/html/style-selection.md) 提出两到三个方案让用户选定，再使用 [HTML 基础模板](assets/html/base.html) 开始制作。美化已有页面时，以现有文件和用户指定的范围为准。
+阅读 [HTML 工作流程](references/html/workflow.md) 与 [设计基准](references/html/design-baseline.md)。
 
-翻页只有两个键：A 或左方向键上一页，D 或右方向键下一页，任何页内交互都不占用这四个键。每页入场一律用 GSAP 时间线实现，按讲述顺序带入内容，不只用整页淡入。
+- 制作新汇报时，按用户用途使用参考原件。用一句观点、一项主要证据和一种呈现方式确定每页内容，再按 [整页版式](references/html/page-layouts.md) 与 [风格选择](references/html/style-selection.md) 组织页面。
+- 修改已有汇报时，按用户指定的页面和内容修改，对照对应的讲稿、图注、数据与时长。按需读取 [汇报组件目录](references/html/components/index.md)。
 
-所有风格都交付一个可离线打开的 HTML 文件，交付前对照 [常见问题清单](references/html/pitfalls.md)，运行 [强制内联 GSAP](references/html/workflow.md#交付前强制内联-gsap)，并通过 [单文件与翻页验收](references/html/workflow.md#单文件与翻页验收)。
+交付一个可离线打开的 HTML 文件。A 或左方向键上一页，D 或右方向键下一页。用 GSAP 时间线按页面的阅读顺序带入内容。交付前按工作流程运行内联与浏览器验收，并逐页核对展示重点。
 
 ## 同时交付稿件和 HTML
 
-先按 [稿件流程](references/script/workflow.md) 把段落排出来，再按段落切页面：一段对应一页，或两段共用一页，每页只放一个结论。稿件负责讲解和过渡，页面只放需要指给听众看的证据和操作。
+用同一条讲述线索组织稿件和页面。逐字稿安排讲解、过渡与交接。页面安排需要听众看到的证据和操作。按讲述顺序标出换页与演示时机，结合总时长安排。
 
 交付前核对三件事：数字在两边一致、术语写法一致、稿件里的演示动作和页面上的操作对得上。
 
 ## 示例
 
-需要对照成品形态时，稿件看 [示例逐字稿](examples/script-demo/逐字稿.md)，页面看 `examples/report-helper-demo/汇报页.html`。暖纸手记风的成品见 `examples/warm-paper-demo/汇报页.html`，自然多色风（多色选择，示例用第 15 套暖粉薄荷）的成品见 `examples/natural-multi-demo/汇报页.html`。示例只用于对照格式与页面组织方式，内容以本次项目资料为准。
+稿件可参考 [示例逐字稿](examples/script-demo/逐字稿.md)。技术汇报的版式与内容组织见 [整页版式](references/html/page-layouts.md) 及 [可离线打开的示例](examples/report-helper-demo/汇报页.html)。

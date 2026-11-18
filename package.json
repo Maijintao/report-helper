@@ -16,12 +16,15 @@
   },
   "scripts": {
     "check": "node scripts/check-deck.mjs",
-    "embed-gsap": "node scripts/embed-gsap.mjs"
+    "embed-gsap": "node scripts/embed-gsap.mjs",
+    "test:components": "node tests/check-components.mjs"
   },
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
-    "playwright-core": "^1.65.0"
+    "echarts": "^6.0.0",
+    "playwright-core": "^1.65.0",
+    "zdog": "^1.1.3"
   }
 }

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>分组柱状图组件</title>
+  <style>
+    .graph-grouped, .graph-grouped * { box-sizing: border-box; }
+    body { margin: 0; padding: clamp(1rem, 2vw, 2rem); background: #f8dfb4; color: #282635; font-family: ui-monospace, 'PingFang SC', monospace; }
+    .graph-grouped { --ink: #282635; --paper: #fcf3e5; width: min(100%, 1300px); margin: 0 auto; border: 4px solid var(--ink); background: var(--paper); box-shadow: 7px 7px 0 var(--ink); color: var(--ink); }
+    .graph-grouped__plot { width: 100%; height: clamp(330px, 40vw, 470px); padding: .8rem; }
+    @media (max-width: 40rem) { body { padding: 1rem; } .graph-grouped { box-shadow: 4px 4px 0 var(--ink); } .graph-grouped__plot { height: 340px; } }
+  </style>
+</head>
+<body>
+  <article class="graph-grouped" data-demo>
+    <div class="graph-grouped__plot" role="img" aria-label="分组柱状图"></div>
+  </article>
+  <script src="../../vendor/echarts-6.min.js"></script>
+  <script>
+    function validateGroupedChart(config) {
+      if (!config || !Array.isArray(config.categories) || !config.categories.length || !Array.isArray(config.series) || !config.series.length || !Number.isFinite(config.maximum) || config.maximum <= 0 || !Number.isInteger(config.decimals) || config.decimals < 0 || config.decimals > 4) throw new Error('分组柱状图需要类别、系列、正数上限和小数位数');
+      if (config.series.some((series) => !series.name || !series.color || !Array.isArray(series.values) || series.values.length !== config.categories.length || series.values.some((value) => !Number.isFinite(value) || value < 0 || value > config.maximum))) throw new Error('每个系列需要名称、颜色和与类别对应的有效数值');
+      if (config.separatorAfter !== undefined && (!Number.isInteger(config.separatorAfter) || config.separatorAfter < 0 || config.separatorAfter >= config.categories.length - 1)) throw new Error('分隔线位置无效');
+    }
+    function createGroupedChart(root, config) {
+      if (!root) throw new Error('分组柱状图需要组件根元素');
+      validateGroupedChart(config);
+      const plot = root.querySelector('.graph-grouped__plot');
+      const chart = echarts.init(plot, null, { renderer: 'svg' });
+      function update(data) {
+        validateGroupedChart(data);
+        plot.setAttribute('aria-label', `分组柱状图：${data.categories.map((category, categoryIndex) => `${category}，${data.series.map((series) => `${series.name} ${series.values[categoryIndex]}`).join('，')}`).join('；')}`);
+        chart.setOption({ animation: !matchMedia('(prefers-reduced-motion: reduce)').matches, animationDuration: 650, color: data.series.map((series) => series.color), grid: { left: 62, right: 18, top: 58, bottom: 45 }, legend: { top: 5, left: 0, itemWidth: 12, itemHeight: 12, itemGap: 18, textStyle: { color: '#282635', fontSize: 13 } }, tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } }, xAxis: { type: 'category', data: data.categories, axisTick: { show: false }, axisLine: { lineStyle: { color: '#716a6b' } }, axisLabel: { color: '#38323e', fontSize: 13 } }, yAxis: { type: 'value', min: 0, max: data.maximum, splitNumber: 4, axisLabel: { color: '#918982', fontSize: 15, fontFamily: 'monospace', formatter: (value) => value.toFixed(data.decimals) }, splitLine: { lineStyle: { color: '#d8d0c6' } } }, series: data.series.map((series, seriesIndex) => ({ name: series.name, type: 'bar', data: series.values, barMaxWidth: 35, itemStyle: { borderColor: '#282635', borderWidth: 3 }, label: { show: true, position: 'top', color: '#282635', fontSize: 15, fontFamily: 'monospace', formatter: (params) => Number(params.value).toFixed(data.decimals) }, ...(seriesIndex === 0 && data.separatorAfter !== undefined ? { markLine: { silent: true, symbol: 'none', label: { show: false }, lineStyle: { color: '#282635', type: 'dashed', width: 2 }, data: [{ xAxis: data.separatorAfter + .5 }] } } : {}) })) }, true);
+      }
+      update(config);
+      const observer = new ResizeObserver(() => chart.resize());
+      observer.observe(plot);
+      return { chart, update, dispose() { observer.disconnect(); chart.dispose(); } };
+    }
+    function animateGroupedChart(timeline, root, position) {
+      timeline.from(root.querySelector('.graph-grouped__plot'), { autoAlpha: 0, y: 12, duration: .5 }, position);
+    }
+    const groupedExample = {
+      categories: ['A', 'B', 'C', 'D', 'E'],
+      maximum: 1,
+      decimals: 2,
+      separatorAfter: 3,
+      series: [
+        { name: '系列一', color: '#83c4e4', values: [.96, .91, .71, .51, .83] },
+        { name: '系列二', color: '#63c96d', values: [.94, .94, .57, .55, .81] },
+        { name: '系列三', color: '#fa8195', values: [.96, 1, .77, .57, .88] },
+        { name: '系列四', color: '#ff9e5c', values: [.96, 1, .83, .63, .90] }
+      ]
+    };
+    document.querySelectorAll('.graph-grouped[data-demo]').forEach((root) => { root.chartController = createGroupedChart(root, groupedExample); });
+  </script>
+</body>
+</html>

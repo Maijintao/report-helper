@@ -3,52 +3,188 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>汇报页验收流程</title>
+  <title>离线汇报怎么交付｜report-helper</title>
   <style>
-    :root { color-scheme: light; --paper: #f4eddf; --ink: #292929; --accent: #ffd54f; font-family: system-ui, sans-serif; color: var(--ink); background: var(--paper); }
+    :root {
+      color-scheme: light;
+      --paper: #f4eddf;
+      --ink: #292929;
+      --accent: #ffd54f;
+      --rule: color-mix(in srgb, var(--ink) 32%, var(--paper));
+      font-family: system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
     * { box-sizing: border-box; }
-    body { margin: 0; }
-    .deck { position: relative; width: min(100vw, 177.777vh); margin: auto; }
-    .slide { aspect-ratio: 16 / 9; padding: 5% 7% 7%; background-color: var(--paper); background-image: linear-gradient(to right, #29292916 1px, transparent 1px), linear-gradient(to bottom, #29292916 1px, transparent 1px); background-size: 4.5rem 4.5rem; }
-    .slide[hidden] { display: none; }
-    h1, h2, h3, p { margin: 0; }
-    .eyebrow { font-size: clamp(.75rem, 1.15vw, 1rem); font-weight: 700; letter-spacing: .14em; }
-    h1, h2, h3 { font-family: Georgia, "Songti SC", serif; }
-    h1 { font-size: clamp(2rem, 5vw, 4.4rem); line-height: 1.14; }
-    h2 { margin-top: .65em; font-size: clamp(1.6rem, 3.4vw, 3rem); }
-    h3 { font-size: clamp(1.2rem, 2.1vw, 1.8rem); }
-    p { font-size: clamp(1rem, 1.5vw, 1.3rem); line-height: 1.6; }
-    .cover { display: grid; grid-template-columns: 1.1fr .9fr; gap: 10%; align-items: center; height: 82%; }
-    .cover p { margin-top: 1.2rem; }
-    .note { position: relative; padding: clamp(1.1rem, 2.4vw, 2rem); background: var(--accent); box-shadow: .5rem .6rem 0 #29292924; }
-    .note::before { content: ""; position: absolute; top: -.7rem; left: 36%; width: 28%; height: 1.4rem; background: #f4eddfe0; transform: rotate(-3deg); }
-    .note p { margin-top: .6rem; }
-    .cover-note { transform: rotate(3deg); }
-    .cover-note > * { transform: rotate(-3deg); }
-    .notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3%; align-items: center; margin-top: 8%; }
-    .note strong { display: block; margin-bottom: .8rem; font-size: 1rem; }
-    .source { margin-top: 2rem; font-size: .85rem; }
-    #slide-status { position: absolute; right: 7%; bottom: 3%; font-size: .9rem; font-variant-numeric: tabular-nums; }
-    /* 入场动效由 GSAP 时间线负责，见页面底部脚本。 */
-    @media (max-width: 40rem) { .slide { aspect-ratio: auto; min-height: 100vh; padding: 2rem 1.5rem 5rem; background-size: 2.5rem 2.5rem; } .cover, .notes { grid-template-columns: 1fr; gap: 1.5rem; height: auto; margin-top: 2rem; } .cover-note { margin-top: 1rem; } #slide-status { right: 1.5rem; bottom: 1.2rem; } }
-    @media print { .deck { width: 100%; } .slide, .slide[hidden] { display: block; break-after: page; } #slide-status { display: none; } }
+    [hidden] { display: none !important; }
+    body { display: grid; min-height: 100svh; place-items: center; margin: 0; }
+    h1, h2, h3, p, figure, ol, dl, dd { margin: 0; }
+    code { overflow-wrap: anywhere; }
+
+    .deck {
+      position: relative;
+      container-type: inline-size;
+      width: min(calc(100% - 32px), calc((100svh - 32px) * 16 / 9));
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      background-image: linear-gradient(#29292911 1px, transparent 1px), linear-gradient(90deg, #29292911 1px, transparent 1px);
+      background-size: 4.1rem 4.1rem;
+    }
+
+    .slide {
+      display: flex;
+      flex-direction: column;
+      min-height: 56.25cqw;
+      padding: 5.5cqw 7cqw 7cqw;
+      font-size: clamp(24px, 2.15cqw, 34px);
+      line-height: 1.48;
+    }
+
+    h1, h2 { font-family: "Songti SC", "Noto Serif SC", Georgia, serif; line-height: 1.14; }
+    h1 { max-width: 10em; font-size: clamp(46px, 7.4cqw, 112px); }
+    h2 { font-size: clamp(32px, 4.3cqw, 70px); }
+    h3 { margin-bottom: .4em; font-size: 1.14em; line-height: 1.25; }
+    .stage { margin-block: auto; padding-top: 3cqw; }
+    .two-columns { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: 5cqw; align-items: center; }
+    .cover { justify-content: center; }
+    .cover .stage { padding-top: 0; }
+    .cover p { margin-top: .75em; }
+    .product { color: var(--ink); font-weight: 750; }
+    .file-note { padding: .85em 1em; background: var(--accent); box-shadow: .26em .28em color-mix(in srgb, var(--ink) 14%, transparent); transform: rotate(-3deg); }
+    .file-note code { display: block; font-size: 1.35em; font-weight: 750; }
+    .file-note p { margin-top: .35em; }
+    .keys { border: 1px solid var(--rule); padding: .7em .95em; background: var(--paper); }
+    .keys div { display: flex; align-items: baseline; justify-content: space-between; gap: .7em; padding: .35em 0; }
+    .keys div + div { border-top: 1px solid var(--rule); }
+    kbd { font: inherit; font-weight: 750; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2.5cqw;
+      padding-inline-start: 0;
+      list-style: none;
+      counter-reset: step;
+    }
+    .steps li { padding: .7em .65em .7em 0; border-top: 2px solid var(--ink); counter-increment: step; }
+    .steps li::before {
+      display: block;
+      width: max-content;
+      margin-bottom: .7em;
+      padding: .06em .42em;
+      background: var(--accent);
+      content: counter(step, decimal-leading-zero);
+      font-weight: 750;
+    }
+    .checks { width: 100%; border-collapse: collapse; background: var(--paper); }
+    .checks th, .checks td { padding: .43em .5em; border-bottom: 1px solid var(--rule); text-align: start; }
+    .checks th:first-child { width: 38%; font-variant-numeric: tabular-nums; }
+    .checks thead { border-top: 2px solid var(--ink); }
+    figcaption { margin-top: .65em; font-size: clamp(18px, 1.5cqw, 25px); }
+    .demo { align-items: stretch; }
+    .command { padding: .72em .9em; background: var(--accent); }
+    .command code { display: block; margin-top: .4em; }
+    .demo-actions { padding: .72em 0; }
+    .demo-actions p + p { margin-top: .5em; }
+    #slide-status { position: absolute; right: 7cqw; bottom: 2.1cqw; font-size: 16px; font-variant-numeric: tabular-nums; }
+
+    @media (max-width: 44rem), (max-aspect-ratio: 4/3) {
+      body { display: block; }
+      .deck { width: 100%; border: 0; background-size: 2.5rem 2.5rem; }
+      .slide { min-height: 100svh; padding: 2.75rem 1.5rem 4.1rem; font-size: 20px; }
+      .stage { margin-block: 1.5rem 0; padding: 0; }
+      .two-columns, .steps { grid-template-columns: minmax(0, 1fr); gap: 1.35rem; }
+      .file-note { transform: none; }
+      .checks th, .checks td { padding-inline: .32em; }
+      #slide-status { right: 1.5rem; bottom: 1.25rem; }
+    }
+
+    @page { size: A4 landscape; margin: 10mm; }
+    @media print {
+      body { display: block; min-height: 0; }
+      .deck { width: 100%; border: 0; }
+      .slide, .slide[hidden] { display: flex !important; break-after: page; print-color-adjust: exact; }
+      .slide:last-of-type { break-after: auto; }
+      #slide-status { display: none; }
+    }
   </style>
 </head>
 <body>
   <main class="deck" aria-label="汇报页面">
-    <section class="slide" aria-labelledby="example-title-1">
-      <div class="eyebrow">汇报页验收 / 01</div>
-      <div class="cover"><div><h1 id="example-title-1">汇报页验收流程</h1><p>检查离线加载、页面切换与窗口尺寸。</p></div><aside class="note cover-note"><h3>检查目标</h3><p>确认单文件汇报页符合展示约定。</p></aside></div>
+    <!-- 封面把交付物放在标题旁，方便听众马上理解项目目标。 -->
+    <section class="slide cover" aria-labelledby="example-title-1">
+      <div class="stage two-columns">
+        <div>
+          <p class="product" data-font-role="body">report-helper</p>
+          <h1 id="example-title-1" data-reveal>离线汇报怎么交付</h1>
+          <p data-font-role="body" data-reveal>把演示需要的资源装进同一份文件。</p>
+        </div>
+        <div class="file-note" data-font-role="body" data-reveal>
+          <code>汇报页.html</code>
+          <p>打开文件即可演示</p>
+        </div>
+      </div>
     </section>
+    <!-- 使用场景只演示交付当天会发生的操作。 -->
     <section class="slide" aria-labelledby="example-title-2" hidden>
-      <div class="eyebrow">验收步骤 / 02</div><h2 id="example-title-2">离线与翻页检查</h2>
-      <div class="notes"><article class="note"><strong>01</strong><h3>离线加载</h3><p>重新加载并检查资源请求。</p></article><article class="note"><strong>02</strong><h3>逐页翻页</h3><p>发送按键并核对当前页面。</p></article><article class="note"><strong>03</strong><h3>页码边界</h3><p>检查页码、首页和末页。</p></article></div>
-      <p class="source">依据：scripts/check-pagination.js</p>
+      <h2 id="example-title-2" data-reveal>打开文件就能开始汇报</h2>
+      <div class="stage two-columns">
+        <p data-font-role="body" data-reveal>换到教室电脑，双击 HTML，再用键盘按顺序展示。右下角显示当前页码和总页数。</p>
+        <dl class="keys" data-font-role="body" data-reveal>
+          <div><dt>上一页</dt><dd><kbd>A</kbd> 或左方向键</dd></div>
+          <div><dt>下一页</dt><dd><kbd>D</kbd> 或右方向键</dd></div>
+        </dl>
+      </div>
     </section>
+    <!-- 步骤在宽窗口横排，缩窄后沿原顺序竖排。 -->
     <section class="slide" aria-labelledby="example-title-3" hidden>
-      <div class="eyebrow">展示条件 / 03</div><h2 id="example-title-3">不同窗口尺寸</h2>
-      <div class="notes"><article class="note"><strong>投影尺寸</strong><h3>1440 × 900</h3><p>检查页面和滚动。</p></article><article class="note"><strong>投影尺寸</strong><h3>1280 × 720</h3><p>检查页面和滚动。</p></article><article class="note"><strong>窄窗口</strong><h3>390 × 844</h3><p>检查页面切换。</p></article></div>
-      <p class="source">依据：scripts/check-pagination.js</p>
+      <h2 id="example-title-3" data-reveal>资源内联后，逐页验证播放</h2>
+      <div class="stage">
+        <ol class="steps" data-font-role="body">
+          <li data-reveal="step">
+            <h3>内联资源</h3>
+            <p>将样式、脚本与展示素材放进 HTML。</p>
+          </li>
+          <li data-reveal="step">
+            <h3>断网重开</h3>
+            <p>用 Chrome 重新打开本地文件，检查资源请求。</p>
+          </li>
+          <li data-reveal="step">
+            <h3>检查播放</h3>
+            <p>逐页验证按键、页码、投影尺寸与动效。</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+    <!-- 数值和对应的检查项目在同一行，表格作为一个证据出现。 -->
+    <section class="slide" aria-labelledby="example-title-4" hidden>
+      <h2 id="example-title-4" data-reveal>验收覆盖三个窗口尺寸</h2>
+      <figure class="stage" data-reveal>
+        <table class="checks" data-font-role="body">
+          <thead><tr><th scope="col">窗口尺寸</th><th scope="col">检查项目</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">1440 × 900</th><td>断网打开、键盘翻页、投影一屏与动效</td></tr>
+            <tr><th scope="row">1280 × 720</th><td>键盘翻页、投影一屏与字号</td></tr>
+            <tr><th scope="row">390 × 844</th><td>窄窗口的按键、页码与切换</td></tr>
+          </tbody>
+        </table>
+        <figcaption>窗口尺寸单位为 px。检查项目来自 <code>scripts/check-pagination.js</code>。</figcaption>
+      </figure>
+    </section>
+    <!-- 执行命令留在演示页，具体检查顺序由讲述提示交代。 -->
+    <section class="slide" aria-labelledby="example-title-5" hidden>
+      <h2 id="example-title-5" data-reveal>现场演示离线播放</h2>
+      <div class="stage two-columns demo">
+        <div class="demo-actions" data-font-role="body" data-reveal>
+          <h3>浏览器操作</h3>
+          <p>按 <kbd>A</kbd> 返回第 4 页，再按 <kbd>D</kbd> 回到本页，查看页码变化。</p>
+          <p>切到终端，运行验收，查看该文件的通过记录。</p>
+        </div>
+        <div class="command" data-font-role="body" data-reveal>
+          <h3>在仓库根目录运行</h3>
+          <code>npm run check -- examples/report-helper-demo/汇报页.html --check-font-sizes</code>
+        </div>
+      </div>
     </section>
     <output id="slide-status" aria-label="页码" aria-live="polite" aria-atomic="true"></output>
   </main>
@@ -70,53 +206,21 @@
     const slides = Array.from(document.querySelectorAll(".deck > section"));
     const status = document.querySelector("#slide-status");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let currentIndex = 0;
+    let currentIndex = -1;
+    let animation;
 
     function animateSlide(slide) {
-      if (reduceMotion || typeof gsap === "undefined") {
-        return;
+      if (reduceMotion) return;
+      animation = gsap.timeline({ defaults: { duration: .4, ease: "power2.out" } });
+      for (const element of slide.querySelectorAll("[data-reveal]")) {
+        const movement = element.dataset.reveal === "step" ? { x: 14 } : {};
+        animation.from(element, { autoAlpha: 0, ...movement }, animation.duration() * .55);
       }
-      const one = (selector) => slide.querySelector(selector);
-      const all = (selector) => slide.querySelectorAll(selector);
-      const timeline = gsap.timeline({ defaults: { duration: 0.5, ease: "power3.out" } });
-
-      if (one(".eyebrow")) {
-        timeline.from(one(".eyebrow"), { autoAlpha: 0, y: 8 });
-      }
-      if (one("h1, h2")) {
-        timeline.from(one("h1, h2"), { autoAlpha: 0, y: 20 }, "-=.3");
-      }
-      if (one(".cover p")) {
-        timeline.from(one(".cover p"), { autoAlpha: 0, y: 14 }, "-=.32");
-      }
-      if (one(".cover-note")) {
-        timeline.from(one(".cover-note"), { autoAlpha: 0, y: 16 }, "-=.3");
-      }
-      const cards = slide.querySelectorAll(".notes .note");
-      if (cards.length > 0) {
-        timeline.from(cards, { autoAlpha: 0, y: 16, stagger: 0.09 }, "-=.3");
-      }
-      if (one(".source")) {
-        timeline.from(one(".source"), { autoAlpha: 0, y: 10 }, "-=.3");
-      }
-    }
-
-    function resetSlide(slide) {
-      if (typeof gsap === "undefined") {
-        return;
-      }
-      const targets = slide.querySelectorAll("*");
-      gsap.killTweensOf(targets);
-      gsap.set(targets, { clearProps: "opacity,visibility,transform" });
     }
 
     function showSlide(index) {
-      if (index < 0 || index >= slides.length) {
-        return;
-      }
-      if (slides[currentIndex] && currentIndex !== index) {
-        resetSlide(slides[currentIndex]);
-      }
+      if (index < 0 || index >= slides.length || index === currentIndex) return;
+      animation?.revert();
       currentIndex = index;
       slides.forEach((slide, position) => {
         slide.hidden = position !== index;

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>重点标注组件</title>
+  <style id="style-annotation-styles">
+    .style-note { --note-color: #28333c; position: relative; display: inline-flex; align-items: center; justify-content: center; gap: .35em; max-width: 100%; color: var(--note-color); font: 700 17px/1.3 system-ui, 'PingFang SC', sans-serif; vertical-align: middle; }
+    .style-note__text { position: relative; z-index: 1; }
+    .style-note--paper { --note-color: #383a36; padding: .5em .85em; background: #fff6d7; box-shadow: 1px 2px 1px #635c4026, 2px 7px 12px #635c4024; transform: rotate(-2deg); font-family: 'Songti SC', serif; }
+    .style-note--paper::before { content: ''; position: absolute; top: -.38em; left: 35%; width: 30%; height: .7em; background: #d8c99caa; transform: rotate(2deg); }
+    .style-note--paper-paperclip { background: #fffdf5; border-left: 3px solid #b46b50; box-shadow: 0 3px 10px #57514320; transform: rotate(1deg); }
+    .style-note--paper-paperclip::before { top: -.4em; left: .7em; width: .35em; height: 1.05em; border: 1.5px solid #7b8580; border-radius: 1em; background: transparent; transform: rotate(25deg); }
+    .style-note--paper-stamp { padding: .35em .7em; border: 2px solid #ae6557; background: #fff9ed; box-shadow: none; color: #ae6557; transform: rotate(-4deg); }
+    .style-note--paper-stamp::before { content: none; }
+    .style-note--code { --note-color: #232323; padding: .35em .6em; border-left: 3px solid #232323; background: #e9e7de; font: 600 15px/1.3 ui-monospace, 'SFMono-Regular', Menlo, monospace; letter-spacing: -.03em; }
+    .style-note--code::before { content: '//'; color: #7d8078; }
+    .style-note--code-tag { border: 1px solid #282828; background: transparent; }
+    .style-note--code-tag::before { content: '<'; color: #818079; }
+    .style-note--code-tag::after { content: '/>'; color: #818079; }
+    .style-note--code-cursor { border: 0; border-bottom: 1px solid #232323; background: transparent; }
+    .style-note--code-cursor::before { content: '>'; color: #232323; }
+    .style-note--code-cursor::after { content: ''; width: .48em; height: 1em; margin-left: .1em; background: #232323; }
+    .style-note--render { --note-color: #343d51; padding: .5em .85em; border: 1px solid #ffffffc7; border-radius: .7em; background: linear-gradient(145deg, #fff 2%, #e4eaf4 60%, #cfd9e7 100%); box-shadow: 0 2px 2px #fff inset, 0 -3px 5px #a7b6ca66 inset, 0 5px 0 #b0bdce, 0 9px 13px #53627b38; }
+    .style-note--render-pill { border-radius: 99px; background: linear-gradient(155deg, #fff5d9, #edc77b); box-shadow: 0 2px 2px #fff9 inset, 0 -3px 6px #b6883e40 inset, 0 5px 0 #bf9d62, 0 9px 13px #83694740; }
+    .style-note--render-pin { width: 2.8em; height: 2.8em; padding: 0; border-radius: 50%; background: radial-gradient(circle at 32% 22%, #fff 0, #e7f8ff 19%, #93c6e7 62%, #659bc4 100%); box-shadow: 0 2px 3px #fff inset, 0 5px 0 #6e9ab9, 0 9px 15px #536d883e; }
+    .style-note--render-pin::after { content: ''; position: absolute; z-index: -1; bottom: -.5em; width: .8em; height: .8em; background: #77a9c9; transform: rotate(45deg); }
+    .style-note--crayon { --note-color: #25312a; padding: .4em .7em; border: 2px solid #25312a; border-radius: 9px 5px 8px 4px; background: repeating-linear-gradient(12deg, #f4c775 0 3px, #f6d395 4px 5px, #eec577 6px 7px); box-shadow: 2px 2px 0 #25312a; transform: rotate(-2deg); }
+    .style-note--crayon-circle { padding: .38em .65em; border: 3px solid #5a8f72; border-radius: 47% 53% 51% 49% / 55% 44% 56% 45%; background: transparent; box-shadow: 1px 1px 0 #a2c7a7, -1px -1px 0 #81b28f; transform: rotate(2deg); }
+    .style-note--crayon-line { padding: .15em .1em .25em; border: 0; border-radius: 0; background: linear-gradient(176deg, transparent 68%, #b8d8a4 69% 85%, transparent 86%); box-shadow: none; transform: rotate(-1deg); }
+    .style-note--cartoon { --note-color: #1438a6; padding: .42em .75em; border: 2px solid #1438a6; border-radius: .7em; background: #ffcf24; box-shadow: 3px 3px 0 #1438a6; font-weight: 800; }
+    .style-note--cartoon-bubble { border-radius: 1em; background: #fff8e6; }
+    .style-note--cartoon-bubble::after { content: ''; position: absolute; left: 22%; bottom: -.4em; width: .6em; height: .6em; border-right: 2px solid #1438a6; border-bottom: 2px solid #1438a6; background: #fff8e6; transform: rotate(45deg); }
+    .style-note--cartoon-star { min-width: 2.4em; min-height: 2.4em; padding: .4em; border: 0; border-radius: 0; background: #ffcf24; box-shadow: none; clip-path: polygon(50% 0,61% 22%,85% 10%,79% 34%,100% 50%,79% 62%,89% 88%,63% 80%,50% 100%,37% 80%,11% 88%,21% 62%,0 50%,21% 34%,15% 10%,39% 22%); }
+    .style-note--line { --note-color: #343638; padding: .4em .6em; border-bottom: 1px solid currentColor; font-weight: 500; }
+    .style-note--line::before { content: ''; width: .38em; height: .38em; border: 1px solid currentColor; border-radius: 50%; }
+    .style-note--line-bracket { border: 0; border-left: 1px solid currentColor; border-right: 1px solid currentColor; }
+    .style-note--line-bracket::before { content: none; }
+    .style-note--line-measure { padding: .4em .7em; border: 0; border-bottom: 1px solid currentColor; }
+    .style-note--line-measure::before, .style-note--line-measure::after { content: ''; position: absolute; bottom: -.22em; width: 1px; height: .45em; border: 0; border-radius: 0; background: currentColor; }
+    .style-note--line-measure::before { left: 0; }
+    .style-note--line-measure::after { right: 0; }
+    .style-note--warm { --note-color: #141100; padding: .35em .65em; background: #ffcd6b; box-shadow: 2px 3px 0 #294171; transform: rotate(-2deg); font-family: 'Songti SC', Georgia, serif; }
+    .style-note--warm-underline { padding: .1em .1em .15em; background: linear-gradient(transparent 64%, #ffcd6b 64% 90%, transparent 90%); box-shadow: none; transform: none; }
+    .style-note--warm-stamp { padding: .3em .55em; border: 2px solid #141100; background: transparent; box-shadow: none; transform: rotate(3deg); }
+  </style>
+  <style id="annotation-styles">
+    .annotation-mark {
+      --accent: #da705a;
+      position: relative;
+      display: inline-block;
+      padding: .14em .28em;
+      color: inherit;
+      line-height: 1.25;
+      white-space: nowrap;
+      isolation: isolate;
+    }
+    .annotation-mark svg { position: absolute; inset: -.1em -.12em; width: calc(100% + .24em); height: calc(100% + .2em); overflow: visible; pointer-events: none; }
+    .annotation-mark svg path, .annotation-mark svg rect { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+    .annotation-mark svg .echo { stroke-width: 1; opacity: .48; }
+    .annotation-line { --accent: #d86c55; position: relative; display: inline-block; padding: 0 .03em .16em; color: inherit; white-space: nowrap; }
+    .annotation-line svg { position: absolute; left: 0; bottom: -.03em; width: 100%; height: .3em; overflow: visible; pointer-events: none; }
+    .annotation-line svg path { fill: none; stroke: var(--accent); stroke-width: 2.6; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+    .annotation-highlight { --accent: #f4dc83; padding: .04em .14em .08em; color: inherit; background: linear-gradient(transparent 43%, var(--accent) 43%, var(--accent) 91%, transparent 91%); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+    .annotation-highlight--block { padding: .08em .22em; background: var(--accent); }
+    .annotation-highlight--round { padding: .1em .32em; border-radius: .24em; background: var(--accent); }
+    .annotation-highlight--brush { padding: .08em .24em; background: linear-gradient(175deg, transparent 12%, var(--accent) 13% 86%, transparent 87%); }
+    .annotation-highlight--underline { background: linear-gradient(transparent 68%, var(--accent) 68%, var(--accent) 95%, transparent 95%); }
+    .annotation-callout { --accent: #d46d53; display: inline-flex; align-items: center; gap: .35em; color: var(--accent); font: inherit; }
+    .annotation-callout__text { line-height: 1.35; white-space: nowrap; }
+    .annotation-callout svg { flex: none; width: 3.7em; height: 2.7em; overflow: visible; }
+    .annotation-callout svg path, .annotation-callout svg circle { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+    .annotation-callout--reverse { flex-direction: row-reverse; }
+    .annotation-callout--reverse svg { transform: scaleX(-1); }
+    .annotation-callout--tag .annotation-callout__text { padding: .25em .55em; border: 1px solid currentColor; border-radius: .3em; }
+    .annotation-callout--pill .annotation-callout__text { padding: .3em .7em; border: 1px solid currentColor; border-radius: 999px; }
+  </style>
+  <style id="preview-styles">
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 30px 38px 38px; background: #f7f6f2; color: #272a30; font-family: system-ui, 'PingFang SC', sans-serif; }
+    main { max-width: 1440px; margin: auto; }
+    h1 { margin: 0 0 22px; font-size: 24px; letter-spacing: .02em; }
+    section + section { margin-top: 21px; }
+    h2 { margin: 0 0 10px; color: #646769; font-size: 13px; font-weight: 600; letter-spacing: .08em; }
+    .preview-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+    .preview-item { display: flex; min-width: 0; min-height: 108px; flex-direction: column; justify-content: space-between; padding: 12px 14px; border: 1px solid #e9e8e3; border-radius: 9px; background: #fff; }
+    .preview-item__sample { display: flex; flex: 1; align-items: center; justify-content: center; min-width: 0; font-size: clamp(15px, 1.45vw, 20px); font-weight: 650; }
+    .preview-item__name { color: #8c8e90; font-size: 11px; font-weight: 500; }
+    .preview-item__sample .annotation-callout { font-size: .78em; }
+    .family-section { margin: 0 0 28px; }
+    .family-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .family-sample { display: flex; min-height: 115px; align-items: center; justify-content: center; padding: 20px; overflow: hidden; }
+    .family-sample--paper { background-color: #f4eedf; background-image: linear-gradient(#c5bba44a 1px, transparent 1px), linear-gradient(90deg, #c5bba44a 1px, transparent 1px); background-size: 18px 18px; }
+    .family-sample--code { background: #efeee9; }
+    .family-sample--render { background: radial-gradient(circle at 50% 25%, #f6f8fc, #d9e1ed); }
+    .family-sample--crayon { background: #f8f3e3; }
+    .family-sample--cartoon { background: #fff8e6; }
+    .family-sample--line { background: #fff; }
+    .family-sample--warm { background: #fffdf1; }
+    @media (max-width: 1050px) { .preview-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 650px) { body { padding: 22px 14px 30px; } .preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .preview-item { padding: 10px; min-height: 92px; } .family-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .family-sample { min-height: 100px; padding: 14px; } }
+    @media (max-width: 360px) { .preview-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>重点标注组件</h1>
+  <section class="family-section" aria-label="不同风格的标注组件">
+    <h2>稿纸 · 便签与印章</h2>
+    <div class="family-grid">
+      <div class="family-sample family-sample--paper"><span class="style-note style-note--paper"><span class="style-note__text">重点说明</span></span></div>
+      <div class="family-sample family-sample--paper"><span class="style-note style-note--paper style-note--paper-paperclip"><span class="style-note__text">关键位置</span></span></div>
+      <div class="family-sample family-sample--paper"><span class="style-note style-note--paper style-note--paper-stamp"><span class="style-note__text">重点内容</span></span></div>
+    </div>
+  </section>
+  <section class="family-section">
+    <h2>代码 · 注释与标记</h2>
+    <div class="family-grid">
+      <div class="family-sample family-sample--code"><span class="style-note style-note--code"><span class="style-note__text">重点说明</span></span></div>
+      <div class="family-sample family-sample--code"><span class="style-note style-note--code style-note--code-tag"><span class="style-note__text">关键位置</span></span></div>
+      <div class="family-sample family-sample--code"><span class="style-note style-note--code style-note--code-cursor"><span class="style-note__text">重点内容</span></span></div>
+    </div>
+  </section>
+  <section class="family-section">
+    <h2>立体渲染 · 浮雕与定位点</h2>
+    <div class="family-grid">
+      <div class="family-sample family-sample--render"><span class="style-note style-note--render"><span class="style-note__text">重点说明</span></span></div>
+      <div class="family-sample family-sample--render"><span class="style-note style-note--render style-note--render-pill"><span class="style-note__text">关键位置</span></span></div>
+      <div class="family-sample family-sample--render"><span class="style-note style-note--render style-note--render-pin"><span class="style-note__text">01</span></span></div>
+    </div>
+  </section>
+  <section class="family-section">
+    <h2>蜡笔画 · 涂色与圈画</h2>
+    <div class="family-grid">
+      <div class="family-sample family-sample--crayon"><span class="style-note style-note--crayon"><span class="style-note__text">重点说明</span></span></div>
+      <div class="family-sample family-sample--crayon"><span class="style-note style-note--crayon style-note--crayon-circle"><span class="style-note__text">关键位置</span></span></div>
+      <div class="family-sample family-sample--crayon"><span class="style-note style-note--crayon style-note--crayon-line"><span class="style-note__text">重点内容</span></span></div>
+    </div>
+  </section>
+  <section class="family-section">
+    <h2>卡通 · 气泡与贴纸</h2>
+    <div class="family-grid">
+      <div class="family-sample family-sample--cartoon"><span class="style-note style-note--cartoon"><span class="style-note__text">重点说明</span></span></div>
+      <div class="family-sample family-sample--cartoon"><span class="style-note style-note--cartoon style-note--cartoon-bubble"><span class="style-note__text">关键位置</span></span></div>
+      <div class="family-sample family-sample--cartoon"><span class="style-note style-note--cartoon style-note--cartoon-star"><span class="style-note__text">01</span></span></div>
+    </div>
+  </section>
+  <section class="family-section">
+    <h2>简笔画 · 线条与尺寸标记</h2>
+    <div class="family-grid">
+      <div class="family-sample family-sample--line"><span class="style-note style-note--line"><span class="style-note__text">重点说明</span></span></div>
+      <div class="family-sample family-sample--line"><span class="style-note style-note--line style-note--line-bracket"><span class="style-note__text">关键位置</span></span></div>
+      <div class="family-sample family-sample--line"><span class="style-note style-note--line style-note--line-measure"><span class="style-note__text">重点内容</span></span></div>
+    </div>
+  </section>
+  <section class="family-section">
+    <h2>暖纸手记 · 纸条与批注</h2>
+    <div class="family-grid">
+      <div class="family-sample family-sample--warm"><span class="style-note style-note--warm"><span class="style-note__text">重点说明</span></span></div>
+      <div class="family-sample family-sample--warm"><span class="style-note style-note--warm style-note--warm-underline"><span class="style-note__text">关键位置</span></span></div>
+      <div class="family-sample family-sample--warm"><span class="style-note style-note--warm style-note--warm-stamp"><span class="style-note__text">重点内容</span></span></div>
+    </div>
+  </section>
+  <section aria-label="圈选与框选">
+    <h2>圈选与框选</h2>
+    <div class="preview-grid">
+      <div class="preview-item"><span class="preview-item__name">手绘圆圈</span><div class="preview-item__sample"><span class="annotation-mark" style="--accent:#d96e58">重点内容<svg viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M101 5 C61 2 17 7 9 23 C0 40 39 52 91 51 C141 53 187 46 192 30 C196 15 158 5 111 4"/><path class="echo" d="M112 3 C153 2 188 12 194 25 C199 39 169 48 131 51"/></svg></span></div></div>
+      <div class="preview-item"><span class="preview-item__name">双线圆圈</span><div class="preview-item__sample"><span class="annotation-mark" style="--accent:#507bba">重点内容<svg viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M105 5 C52 3 8 10 8 28 C9 46 56 52 103 51 C153 51 192 45 192 28 C191 13 155 5 105 5Z"/><path class="echo" d="M96 8 C50 8 13 13 13 27 C13 42 50 49 100 49 C149 49 186 42 187 28 C187 16 151 8 105 7"/></svg></span></div></div>
+      <div class="preview-item"><span class="preview-item__name">手绘方框</span><div class="preview-item__sample"><span class="annotation-mark" style="--accent:#527a67">重点内容<svg viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M7 8 Q58 5 99 7 T192 6 L194 47 Q150 51 99 49 T7 50 Z"/><path class="echo" d="M12 5 Q77 3 137 5 L190 4 M195 11 L196 43"/></svg></span></div></div>
+      <div class="preview-item"><span class="preview-item__name">圆角框选</span><div class="preview-item__sample"><span class="annotation-mark" style="--accent:#9b77b8">重点内容<svg viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M19 6 H181 Q194 6 194 18 V38 Q194 50 181 50 H19 Q6 50 6 38 V18 Q6 6 19 6Z"/></svg></span></div></div>
+      <div class="preview-item"><span class="preview-item__name">括号强调</span><div class="preview-item__sample"><span class="annotation-mark" style="--accent:#c58c35">重点内容<svg viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M18 6 Q7 7 7 18 V38 Q7 49 18 50 M182 6 Q193 7 193 18 V38 Q193 49 182 50"/></svg></span></div></div>
+    </div>
+  </section>
+  <section aria-label="下划线">
+    <h2>下划线</h2>
+    <div class="preview-grid">
+      <div class="preview-item"><span class="preview-item__name">手绘单线</span><div class="preview-item__sample"><span class="annotation-line" style="--accent:#d96e58">重点内容<svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M3 8 Q66 3 119 6 T197 5"/></svg></span></div></div>
+      <div class="preview-item"><span class="preview-item__name">手绘双线</span><div class="preview-item__sample"><span class="annotation-line" style="--accent:#507bba">重点内容<svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M3 3 Q100 1 197 3 M12 9 Q105 7 190 9"/></svg></span></div></div>
+      <div class="preview-item"><span class="preview-item__name">波浪线</span><div class="preview-item__sample"><span class="annotation-line" style="--accent:#a074b6">重点内容<svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 6 Q12 0 22 6 T42 6 T62 6 T82 6 T102 6 T122 6 T142 6 T162 6 T182 6 T198 6"/></svg></span></div></div>
+      <div class="preview-item"><span class="preview-item__name">短划线</span><div class="preview-item__sample"><span class="annotation-line" style="--accent:#638d77">重点内容<svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M3 6 H197" stroke-dasharray="5 6"/></svg></span></div></div>
+      <div class="preview-item"><span class="preview-item__name">尾部上扬</span><div class="preview-item__sample"><span class="annotation-line" style="--accent:#c68b39">重点内容<svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M3 6 Q75 10 144 7 Q184 5 197 2"/></svg></span></div></div>
+    </div>
+  </section>
+  <section aria-label="色块强调">
+    <h2>色块强调</h2>
+    <div class="preview-grid">
+      <div class="preview-item"><span class="preview-item__name">荧光笔</span><div class="preview-item__sample"><span class="annotation-highlight" style="--accent:#f6df87">重点内容</span></div></div>
+      <div class="preview-item"><span class="preview-item__name">浅色底纹</span><div class="preview-item__sample"><span class="annotation-highlight annotation-highlight--block" style="--accent:#dcebe1">重点内容</span></div></div>
+      <div class="preview-item"><span class="preview-item__name">圆角底纹</span><div class="preview-item__sample"><span class="annotation-highlight annotation-highlight--round" style="--accent:#e8e0f3">重点内容</span></div></div>
+      <div class="preview-item"><span class="preview-item__name">画笔色块</span><div class="preview-item__sample"><span class="annotation-highlight annotation-highlight--brush" style="--accent:#f6d5c4">重点内容</span></div></div>
+      <div class="preview-item"><span class="preview-item__name">宽色下划线</span><div class="preview-item__sample"><span class="annotation-highlight annotation-highlight--underline" style="--accent:#bdddeb">重点内容</span></div></div>
+    </div>
+  </section>
+  <section aria-label="箭头与说明">
+    <h2>箭头与说明</h2>
+    <div class="preview-grid">
+      <div class="preview-item"><span class="preview-item__name">手绘曲线</span><div class="preview-item__sample"><span class="annotation-callout" style="--accent:#cf705a"><svg viewBox="0 0 72 52" aria-hidden="true"><path d="M68 7 C39 5 19 15 12 40 M7 31 L12 41 L22 35"/></svg><span class="annotation-callout__text">重点说明</span></span></div></div>
+      <div class="preview-item"><span class="preview-item__name">折线引导</span><div class="preview-item__sample"><span class="annotation-callout" style="--accent:#557bb4"><svg viewBox="0 0 72 52" aria-hidden="true"><path d="M68 9 H37 L11 37 M11 27 V38 H22"/></svg><span class="annotation-callout__text">重点说明</span></span></div></div>
+      <div class="preview-item"><span class="preview-item__name">圆点引导</span><div class="preview-item__sample"><span class="annotation-callout" style="--accent:#59866d"><svg viewBox="0 0 72 52" aria-hidden="true"><circle cx="11" cy="36" r="3"/><path d="M14 34 L37 10 H68"/></svg><span class="annotation-callout__text">重点说明</span></span></div></div>
+      <div class="preview-item"><span class="preview-item__name">文字标签</span><div class="preview-item__sample"><span class="annotation-callout annotation-callout--tag" style="--accent:#a475ae"><svg viewBox="0 0 72 52" aria-hidden="true"><path d="M68 10 H38 Q26 10 20 22 L12 37 M10 27 L12 38 L23 34"/></svg><span class="annotation-callout__text">重点说明</span></span></div></div>
+      <div class="preview-item"><span class="preview-item__name">反向箭头</span><div class="preview-item__sample"><span class="annotation-callout annotation-callout--reverse annotation-callout--pill" style="--accent:#b88745"><svg viewBox="0 0 72 52" aria-hidden="true"><path d="M68 7 C40 5 21 14 12 39 M7 29 L12 40 L23 34"/></svg><span class="annotation-callout__text">重点说明</span></span></div></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

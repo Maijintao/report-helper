@@ -1,0 +1,59 @@
+<style>
+  .timeline-paper {
+    --timeline-paper-ink: #302b25;
+    --timeline-paper-accent: #a5533f;
+    color: var(--timeline-paper-ink);
+    font-family: system-ui, sans-serif;
+  }
+  .timeline-paper__list {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    margin: 0;
+    padding: 1rem 0 0;
+    list-style: none;
+  }
+  .timeline-paper__item {
+    flex: 1 1 0;
+    min-width: 0;
+    position: relative;
+    padding-top: 2rem;
+    border-top: 2px solid var(--timeline-paper-ink);
+  }
+  .timeline-paper__item::before {
+    content: '';
+    position: absolute;
+    top: -.56rem;
+    left: 0;
+    width: .85rem;
+    height: .85rem;
+    border: 2px solid var(--timeline-paper-ink);
+    border-radius: 50%;
+    background: var(--timeline-paper-surface, #f7f1e3);
+  }
+  .timeline-paper__item:nth-child(even) { padding-top: 3.7rem; }
+  .timeline-paper__date { display: block; color: var(--timeline-paper-accent); font-weight: 700; font-size: 1rem; }
+  .timeline-paper__title { margin: .65rem 0 .45rem; font: 700 clamp(1.25rem, 2vw, 1.75rem)/1.3 'Songti SC', Georgia, serif; }
+  .timeline-paper__text { margin: 0; font-size: clamp(1.05rem, 1.5vw, 1.3rem); line-height: 1.6; }
+  @media (max-width: 44rem) {
+    .timeline-paper__list { display: block; padding: 0 0 0 .5rem; }
+    .timeline-paper__item, .timeline-paper__item:nth-child(even) { padding: 0 0 1.8rem 1.6rem; border-top: 0; border-left: 2px solid var(--timeline-paper-ink); }
+    .timeline-paper__item::before { top: .2rem; left: -.56rem; }
+    .timeline-paper__item:last-child { padding-bottom: 0; }
+  }
+</style>
+
+<div class="timeline-paper">
+  <ol class="timeline-paper__list" aria-label="项目进程示例">
+    <li class="timeline-paper__item"><span class="timeline-paper__date">3 月</span><h3 class="timeline-paper__title">明确问题</h3><p class="timeline-paper__text">整理需求与研究范围。</p></li>
+    <li class="timeline-paper__item"><span class="timeline-paper__date">4 月</span><h3 class="timeline-paper__title">构思方案</h3><p class="timeline-paper__text">比较思路，确定方向。</p></li>
+    <li class="timeline-paper__item"><span class="timeline-paper__date">5 月</span><h3 class="timeline-paper__title">制作验证</h3><p class="timeline-paper__text">完成原型，收集反馈。</p></li>
+    <li class="timeline-paper__item"><span class="timeline-paper__date">6 月</span><h3 class="timeline-paper__title">整理成果</h3><p class="timeline-paper__text">归纳结果，准备展示。</p></li>
+  </ol>
+</div>
+
+<script>
+  function animateTimelinePaper(timeline, root, position) {
+    timeline.from(root.querySelectorAll('.timeline-paper__item'), { autoAlpha: 0, y: 18, stagger: 0.13, duration: 0.45, ease: 'power3.out' }, position);
+  }
+</script>
