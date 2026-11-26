@@ -1,0 +1,105 @@
+<style>
+  .timeline-editorial {
+    --ed-bg: #FAF9F6;
+    --ed-ink: #1C1A17;
+    --ed-secondary: #565047;
+    --ed-muted: #867E73;
+    --ed-rule: rgba(28, 26, 23, 0.22);
+    --ed-red: #E05A47;
+    --ed-blue: #2B5B84;
+    --ed-note-bg: #FFF9DB;
+    --ed-note-border: #E5D48B;
+    color: var(--ed-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  }
+  .timeline-editorial__layout { display: grid; grid-template-columns: 1.4fr 0.85fr; gap: 2rem; align-items: start; }
+  .timeline-editorial__list { position: relative; margin: 0; padding: 0 0 0 1.8rem; list-style: none; }
+  .timeline-editorial__list::before { content: ""; position: absolute; left: 0.45rem; top: 0.6rem; bottom: 1rem; width: 2px; background: var(--ed-rule); }
+  .timeline-editorial__item { position: relative; padding: 0 0 1.35rem 0.6rem; cursor: pointer; }
+  .timeline-editorial__item:last-child { padding-bottom: 0; }
+  .timeline-editorial__item::before {
+    content: "";
+    position: absolute;
+    left: -1.65rem;
+    top: 0.35rem;
+    width: 0.78rem;
+    height: 0.78rem;
+    border-radius: 50%;
+    background: var(--ed-bg);
+    border: 2px solid var(--ed-ink);
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+  .timeline-editorial__item.is-active::before { background: var(--ed-red); border-color: var(--ed-red); transform: scale(1.18); }
+  .timeline-editorial__date { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.75rem; letter-spacing: 0.06em; color: var(--ed-muted); }
+  .timeline-editorial__item.is-active .timeline-editorial__date { color: var(--ed-red); font-weight: 700; }
+  .timeline-editorial__title { margin: 0.15rem 0 0.25rem; font-family: "Songti SC", "Noto Serif SC", Georgia, serif; font-size: 1.18rem; line-height: 1.35; }
+  .timeline-editorial__text { margin: 0; font-size: 0.92rem; color: var(--ed-secondary); line-height: 1.55; }
+  .timeline-editorial__note {
+    position: relative;
+    background: var(--ed-note-bg);
+    border: 1px dashed var(--ed-note-border);
+    padding: 1.2rem 1.25rem;
+    transform: rotate(1.2deg);
+    box-shadow: 0 8px 20px rgba(28, 26, 23, 0.08);
+  }
+  .timeline-editorial__tape {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 72px;
+    height: 18px;
+    background: rgba(235, 224, 192, 0.78);
+  }
+  .timeline-editorial__note-tag { font-family: ui-monospace, Menlo, monospace; font-size: 0.72rem; color: var(--ed-blue); font-weight: 700; letter-spacing: 0.06em; margin-bottom: 0.45rem; }
+  .timeline-editorial__note-body { margin: 0; font-family: "Kaiti SC", "STKaiti", cursive, serif; font-size: 1rem; line-height: 1.6; }
+  @media (max-width: 44rem) { .timeline-editorial__layout { grid-template-columns: 1fr; } }
+</style>
+
+<div class="timeline-editorial">
+  <div class="timeline-editorial__layout">
+    <ol class="timeline-editorial__list" aria-label="档案风里程碑示例">
+      <li class="timeline-editorial__item is-active" data-note-tag="NOTE · WEEK 01" data-note-text="全局 SVG 滤镜字典采用 0×0 绝对定位，避免 display:none 导致部分浏览器滤镜失效。">
+        <span class="timeline-editorial__date">WEEK 01 · 视觉奠基</span>
+        <h3 class="timeline-editorial__title">建立粉笔滤镜与排线字典</h3>
+        <p class="timeline-editorial__text">消除生硬矢量感，沉淀可全局复用的 SVG 滤镜与斜纹图案。</p>
+      </li>
+      <li class="timeline-editorial__item" data-note-tag="NOTE · WEEK 02" data-note-text="用哑铃图讲差距，用斜率图讲排名跃迁，用 100 格瓦片图替代传统饼图。">
+        <span class="timeline-editorial__date">WEEK 02 · 组件扩充</span>
+        <h3 class="timeline-editorial__title">引入数据新闻核心组件</h3>
+        <p class="timeline-editorial__text">覆盖差距对比、趋势跃迁、构成矩阵与有机因果流四大叙事场景。</p>
+      </li>
+      <li class="timeline-editorial__item" data-note-tag="NOTE · WEEK 03" data-note-text="单文件内联 GSAP 后运行多端断网巡检，确保投影与手机端零溢出。">
+        <span class="timeline-editorial__date">WEEK 03 · 验收交付</span>
+        <h3 class="timeline-editorial__title">完成自动化质检与离线封装</h3>
+        <p class="timeline-editorial__text">同步输出配套逐字稿与可离线打开的杂志手绘风汇报页。</p>
+      </li>
+    </ol>
+    <aside class="timeline-editorial__note">
+      <div class="timeline-editorial__tape"></div>
+      <div class="timeline-editorial__note-tag">NOTE · WEEK 01</div>
+      <p class="timeline-editorial__note-body">全局 SVG 滤镜字典采用 0×0 绝对定位，避免 display:none 导致部分浏览器滤镜失效。</p>
+    </aside>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.timeline-editorial').forEach((root) => {
+    const items = root.querySelectorAll('.timeline-editorial__item');
+    const tag = root.querySelector('.timeline-editorial__note-tag');
+    const body = root.querySelector('.timeline-editorial__note-body');
+    items.forEach((item) => {
+      item.addEventListener('click', () => {
+        items.forEach((el) => el.classList.toggle('is-active', el === item));
+        if (tag && item.dataset.noteTag) tag.textContent = item.dataset.noteTag;
+        if (body && item.dataset.noteText) body.textContent = item.dataset.noteText;
+      });
+    });
+  });
+
+  function animateTimelineEditorial(timeline, root, position) {
+    timeline.from(root.querySelectorAll('.timeline-editorial__item'), { autoAlpha: 0, y: 16, stagger: 0.12, duration: 0.45, ease: 'power2.out' }, position);
+    const note = root.querySelector('.timeline-editorial__note');
+    if (note) timeline.from(note, { autoAlpha: 0, y: 14, duration: 0.45, ease: 'power2.out' }, '-=0.2');
+  }
+</script>

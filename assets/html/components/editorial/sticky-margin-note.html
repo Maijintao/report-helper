@@ -1,0 +1,68 @@
+<svg style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none" aria-hidden="true">
+  <defs>
+    <filter id="chalk-texture" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" seed="7" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+
+<style>
+  .sticky-margin-note {
+    --note-bg: #FFF9DB;
+    --note-border: #E5D48B;
+    --note-tape: rgba(235, 224, 192, 0.78);
+    --note-blue: #2B5B84;
+    --note-ink: #1C1A17;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 100%;
+    padding-top: 12px;
+  }
+  .sticky-margin-note__arrow { width: 68px; height: 52px; flex-shrink: 0; overflow: visible; }
+  .sticky-margin-note__card {
+    position: relative;
+    max-width: 300px;
+    background: var(--note-bg);
+    border: 1px dashed var(--note-border);
+    padding: 18px 20px;
+    transform: rotate(-1.5deg);
+    box-shadow: 0 10px 24px rgba(28, 26, 23, 0.08);
+  }
+  .sticky-margin-note__tape {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(2deg);
+    width: 76px;
+    height: 20px;
+    background: var(--note-tape);
+  }
+  .sticky-margin-note__title { font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; color: var(--note-blue); font-weight: 700; margin-bottom: 6px; }
+  .sticky-margin-note__text { margin: 0; font-family: "Kaiti SC", "STKaiti", cursive, serif; font-size: 16px; line-height: 1.6; color: var(--note-ink); }
+</style>
+
+<div class="sticky-margin-note">
+  <svg class="sticky-margin-note__arrow" viewBox="0 0 96 76" aria-hidden="true">
+    <path class="draw-stroke" d="M 8 58 C 18 22, 48 14, 82 22" fill="none" stroke="var(--note-blue)" stroke-width="2.3" stroke-linecap="round" filter="url(#chalk-texture)" />
+    <path class="draw-stroke" d="M 71 14 C 76 18, 80 20, 84 22 C 79 25, 74 29, 69 32" fill="none" stroke="var(--note-blue)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" filter="url(#chalk-texture)" />
+  </svg>
+  <aside class="sticky-margin-note__card">
+    <div class="sticky-margin-note__tape"></div>
+    <div class="sticky-margin-note__title">EDITOR'S MARGIN NOTE</div>
+    <p class="sticky-margin-note__text">有机弯曲箭头配不对称手绘 V 字箭头，指向微倾的胶带便利贴，适合补充关键口径或现场提示。</p>
+  </aside>
+</div>
+
+<script>
+  function animateStickyMarginNote(timeline, root, position) {
+    const strokes = root.querySelectorAll('.draw-stroke');
+    strokes.forEach((p, idx) => {
+      const len = p.getTotalLength ? p.getTotalLength() : 120;
+      timeline.fromTo(p, { strokeDasharray: len + 6, strokeDashoffset: len + 6 }, { strokeDashoffset: 0, duration: 0.55, ease: 'power2.out' }, idx === 0 ? position : '-=0.35');
+    });
+    timeline.from(root.querySelector('.sticky-margin-note__card'), { autoAlpha: 0, y: 14, duration: 0.45, ease: 'power2.out' }, '-=0.25');
+  }
+</script>

@@ -12,6 +12,7 @@ const components = [
   { file: 'timeline/warm-paper.html', selector: '.timeline-warm', item: '.timeline-warm__item', animate: 'animateTimelineWarm' },
   { file: 'timeline/natural-multi.html', selector: '.timeline-natural', item: '.timeline-natural__item', animate: 'animateTimelineNatural' },
   { file: 'timeline/alternating-cards.html', selector: '.timeline-cards', item: '.timeline-cards__item', animate: 'animateTimelineCards' },
+  { file: 'timeline/editorial-chronology.html', selector: '.timeline-editorial', item: '.timeline-editorial__item', animate: 'animateTimelineEditorial' },
 ];
 
 const browser = await chromium.launch({ channel: 'chrome' });
@@ -255,5 +256,43 @@ await page.locator('main .annotation-highlight').first().evaluate((element) => {
 assert.equal(await page.locator('main .annotation-highlight').first().textContent(), '替换后的文字');
 assert.match(await page.locator('main .annotation-highlight').first().evaluate((element) => getComputedStyle(element).backgroundImage), /40, 90, 130/);
 
+const editorialComponents = [
+  { file: 'chalk-annotations.html', selector: '.chalk-annotations', animate: 'animateChalkAnnotations' },
+  { file: 'sticky-margin-note.html', selector: '.sticky-margin-note', animate: 'animateStickyMarginNote' },
+  { file: 'kpi-strip.html', selector: '.editorial-kpi', animate: 'animateEditorialKpi' },
+  { file: 'dumbbell-gap.html', selector: '.dumbbell-gap', animate: 'animateDumbbellGap' },
+  { file: 'slopegraph.html', selector: '.slopegraph', animate: 'animateSlopegraph' },
+  { file: 'hatched-bars.html', selector: '.hatched-bars', animate: 'animateHatchedBars' },
+  { file: 'waffle-matrix.html', selector: '.waffle-matrix', animate: 'animateWaffleMatrix' },
+  { file: 'organic-flow.html', selector: '.organic-flow', animate: 'animateOrganicFlow' },
+  { file: 'three-line-table.html', selector: '.three-line-block', animate: 'animateThreeLineTable' },
+];
+
+for (const component of editorialComponents) {
+  const errors = [];
+  const onPageError = (error) => errors.push(error.message);
+  page.on('pageerror', onPageError);
+  await page.goto(pathToFileURL(resolve(root, 'assets/html/components/editorial', component.file)).href);
+  await page.addScriptTag({ path: vendor });
+  assert.equal(await page.locator(component.selector).count(), 1, `editorial/${component.file} 需要包含主组件容器`);
+  const duration = await page.evaluate(({ selector, animate }) => {
+    const timeline = gsap.timeline({ paused: true });
+    window[animate](timeline, document.querySelector(selector), 0);
+    timeline.progress(1);
+    return timeline.duration();
+  }, component);
+  assert.ok(duration > 0, `editorial/${component.file} 需要提供 GSAP 动画`);
+  if (component.file === 'waffle-matrix.html') {
+    assert.equal(await page.locator('.waffle-matrix__cell').count(), 100, '瓦片比例图需要渲染 100 个格子');
+  }
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    const overflow = await page.evaluate(() => ({ content: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth }));
+    assert.ok(overflow.content <= overflow.viewport + 1, `editorial/${component.file} 在 ${width}px 下出现横向溢出`);
+  }
+  assert.deepEqual(errors, [], `editorial/${component.file} 出现运行错误`);
+  page.off('pageerror', onPageError);
+}
+
 await browser.close();
-console.log(`通过 ${components.length} 个时间线、${charts.length} 个图表和标注组件的检查，标注预览包含 21 个风格标注及 20 个通用标注。`);
+console.log(`通过 ${components.length} 个时间线、${charts.length} 个图表、${editorialComponents.length} 个杂志手绘组件和标注组件的检查，标注预览包含 21 个风格标注及 20 个通用标注。`);

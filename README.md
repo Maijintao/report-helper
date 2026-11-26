@@ -4,6 +4,15 @@
 
 这是一个给 AI agent 用的 skill（技能包），面向课程中期检查、期末答辩、工作项目进度汇报、成果验收和技术评审。
 
+👉 **[在线体验风格与组件画廊（GitHub Pages）](https://maijintao.github.io/report-helper/)** · **[杂志手绘组件实验室](https://maijintao.github.io/report-helper/docs/editorial-lab.html)**
+
+<p align="center">
+  <img src="docs/images/editorial-hero.jpg" alt="杂志手绘风导语与批注预览" width="100%" />
+</p>
+<p align="center">
+  <img src="docs/images/editorial-charts.jpg" alt="哑铃对比图与斜率跃迁图预览" width="100%" />
+</p>
+
 ## 它解决什么
 
 汇报最费时间的是两件事：写稿子，做页面。这两件事其实共用同一份材料，但大多数人分开做，做完还对不上。
@@ -11,18 +20,37 @@
 这个 skill 把它们绑在一起：
 
 - **逐字稿**：按听众和汇报目的组织证据，安排案例、过渡、演示与交接，并准备答辩问答。
-- **HTML 汇报页**：单文件、断网能开、键盘翻页、每页带 GSAP 动效，六套现成风格。
+- **HTML 汇报页**：单文件、断网能开、键盘翻页、每页带 GSAP 动效，七套现成风格与杂志手绘组件库。
 
 两者可以单独要，也可以从同一份资料一起出。
 
 ## 快速开始
 
-### 当作 skill 用
+### 方式一：一行命令一键安装（推荐）
 
-把整个目录放进 agent 的 skills 目录，例如 WorkBuddy 的 `~/.workbuddy-ai/skills/report-helper`，然后直接说：
+支持 Claude Code、Cursor、Codex、Antigravity、WorkBuddy 等主流 AI Agent：
+
+```sh
+# 通用 Agent Skills CLI（自动识别你的 Agent 目录）
+npx skills add Maijintao/report-helper
+```
+
+或使用内置脚本自动检测并安装 / 更新：
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/Maijintao/report-helper/main/scripts/install.sh | bash
+```
+
+也可以指定目标目录手动 `git clone`：
+
+```sh
+git clone https://github.com/Maijintao/report-helper.git ~/.claude/skills/report-helper
+```
+
+安装后直接对你的 Agent 说：
 
 - 「帮我写周三中期检查的逐字稿，8 分钟，我负责采集端」
-- 「把这份资料做成期末答辩的汇报页」
+- 「把这份资料做成杂志手绘风的期末答辩汇报页」
 - 「稿子和页面一起要，10 分钟」
 
 agent 会读 `SKILL.md` 里的路由，按场景加载 `references/` 下对应的规则。
@@ -55,7 +83,7 @@ assets/html/
   base.html               基础模板（结构 + 翻页 + 时间线）
   deck-core.js            翻页与动效的参考实现
   components/             按用途分类的时间线和图表组件
-  styles/<风格>/deck.html  六套可离线打开的成品模板
+  styles/<风格>/deck.html  七套可离线打开的成品模板
   vendor/                 GSAP、ECharts 和 Zdog 发行文件（内联用）
 scripts/
   embed-gsap.mjs          把 GSAP 整段内联进成品
@@ -64,7 +92,7 @@ scripts/
 examples/                 成品示例
 ```
 
-## 六套风格
+## 七套风格
 
 | 风格 | 适合 | 不适合 |
 | --- | --- | --- |
@@ -74,8 +102,9 @@ examples/                 成品示例
 | 卡通风 | 科普、创意项目、社团活动 | 技术评审、严肃答辩 |
 | 暖纸手记风 | 个人项目、作品集、宣讲 | 数据密集页、严肃评审 |
 | 自然多色风（多色选择） | 课程汇报、创意项目 | 精确读数的图表、单一品牌色 |
+| 杂志手绘风（暖纸 / 黑板） | 技术评审、项目汇报、成果验收、数据报告 | 高饱和卡通科普、强暗黑炫酷风 |
 
-自然多色风自带 17 套配色，先选一套再做页面；其余五套配色固定。
+自然多色风自带 17 套配色，先选一套再做页面；杂志手绘风支持暖纸白与深黑板粉笔双模式；其余五套配色固定。
 
 ## 两条硬规矩
 

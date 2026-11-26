@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>report-helper · 在线风格与组件预览画廊</title>
+  <style>
+    :root {
+      --bg: #FAF9F6;
+      --card: #FFFFFF;
+      --ink: #1C1A17;
+      --secondary: #565047;
+      --muted: #867E73;
+      --rule: rgba(28, 26, 23, 0.14);
+      --rule-strong: rgba(28, 26, 23, 0.78);
+      --red: #E05A47;
+      --blue: #2B5B84;
+      --font-serif: "Songti SC", "STSong", "Noto Serif SC", Georgia, serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      --font-mono: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      padding-bottom: 80px;
+    }
+    .page { width: min(1020px, calc(100% - 40px)); margin: 0 auto; }
+    .masthead {
+      padding: 24px 0 14px;
+      border-bottom: 3px double var(--rule-strong);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .masthead strong { color: var(--ink); }
+    .masthead a { color: var(--blue); text-decoration: none; font-weight: 700; }
+    .hero { padding: 48px 0 36px; border-bottom: 1px solid var(--rule); }
+    .hero h1 { font-family: var(--font-serif); font-size: clamp(32px, 4.5vw, 48px); margin: 0 0 14px; line-height: 1.2; }
+    .hero p { font-size: 17px; color: var(--secondary); max-width: 680px; margin: 0 0 24px; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 1.5px solid var(--rule-strong);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 2px;
+      transition: all 0.2s ease;
+    }
+    .btn:hover { background: var(--ink); color: var(--bg); }
+    .btn-red { background: var(--red); border-color: var(--red); color: #fff; }
+    .btn-red:hover { opacity: 0.9; background: var(--red); color: #fff; }
+    .sec { padding: 40px 0; border-bottom: 1px solid var(--rule); }
+    .sec:last-of-type { border-bottom: none; }
+    .sec-kicker { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: var(--red); margin-bottom: 6px; text-transform: uppercase; }
+    .sec h2 { font-family: var(--font-serif); font-size: 26px; margin: 0 0 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 16px; }
+    .item {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--card);
+      border: 1px solid var(--rule);
+      padding: 18px 20px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .item:hover { border-color: var(--red); transform: translateY(-2px); }
+    .item-tag { font-family: var(--font-mono); font-size: 11px; color: var(--blue); font-weight: 700; }
+    .item h3 { font-family: var(--font-serif); font-size: 19px; margin: 6px 0; }
+    .item p { margin: 0; font-size: 13.5px; color: var(--secondary); }
+    .shot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; }
+    .shot-grid img { width: 100%; border: 1px solid var(--rule); display: block; }
+    @media (max-width: 720px) { .shot-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div><strong>REPORT-HELPER</strong> · LIVE SPECIMEN GALLERY</div>
+      <a href="https://github.com/Maijintao/report-helper" target="_blank" rel="noreferrer">GitHub 仓库 →</a>
+    </header>
+
+    <section class="hero">
+      <h1>把项目资料变成答辩逐字稿与离线 HTML 汇报页</h1>
+      <p>单文件离线可开 · A/D 或左右方向键翻页 · GSAP 动效 · 七套风格模板与杂志手绘组件库。</p>
+      <div class="cta-row">
+        <a class="btn btn-red" href="docs/editorial-lab.html">体验杂志手绘组件实验室 →</a>
+        <a class="btn" href="assets/html/styles/editorial-sketch/deck.html">打开杂志手绘风 6 页模板</a>
+        <a class="btn" href="assets/html/components/annotations/gallery.html">查看标注组件预览</a>
+      </div>
+      <div class="shot-grid">
+        <img src="docs/images/editorial-hero.jpg" alt="杂志手绘风导语与批注预览" />
+        <img src="docs/images/editorial-charts.jpg" alt="哑铃对比图与斜率跃迁图预览" />
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-kicker">01 / SEVEN STYLES</div>
+      <h2>七套离线翻页风格模板（打开后按 A / D 或 ← / → 翻页）</h2>
+      <div class="grid">
+        <a class="item" href="assets/html/styles/editorial-sketch/deck.html">
+          <div class="item-tag">NEW · 暖纸 / 黑板双模式</div>
+          <h3>杂志手绘风</h3>
+          <p>粉笔颗粒滤镜、不闭合手绘圆圈、哑铃图与斜率图，适合评审与汇报。</p>
+        </a>
+        <a class="item" href="assets/html/styles/paper/deck.html">
+          <div class="item-tag">CLASSIC</div>
+          <h3>稿纸风</h3>
+          <p>适合有截图、图解或实测数据，需要指给听众看细节的页面。</p>
+        </a>
+        <a class="item" href="assets/html/styles/code-flow/deck.html">
+          <div class="item-tag">ENGINEERING</div>
+          <h3>流式代码风</h3>
+          <p>适合软件工程、系统架构、接口与代码讲解。</p>
+        </a>
+        <a class="item" href="assets/html/styles/warm-paper/deck.html">
+          <div class="item-tag">STORYTELLING</div>
+          <h3>暖纸手记风</h3>
+          <p>台面与纸片层次，适合个人项目、作品集与观点宣讲。</p>
+        </a>
+        <a class="item" href="assets/html/styles/natural-multi/deck.html">
+          <div class="item-tag">17 PALETTES</div>
+          <h3>自然多色风</h3>
+          <p>内置 17 套配色方案，适合课程汇报与创意项目。</p>
+        </a>
+        <a class="item" href="assets/html/styles/line-art/deck.html">
+          <div class="item-tag">DIAGRAM</div>
+          <h3>简笔画风</h3>
+          <p>适合结构、装配、状态对比与动作过程讲解。</p>
+        </a>
+        <a class="item" href="assets/html/styles/cartoon/deck.html">
+          <div class="item-tag">PLAYFUL</div>
+          <h3>卡通风</h3>
+          <p>适合科普、创意活动与非专业听众。</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-kicker">02 / LIVE DEMOS</div>
+      <h2>完整成品示例</h2>
+      <div class="grid">
+        <a class="item" href="examples/report-helper-demo/汇报页.html">
+          <div class="item-tag">DEMO</div>
+          <h3>技术交付汇报示例</h3>
+          <p>稿纸风完整成品，附配套逐字稿与验收记录。</p>
+        </a>
+        <a class="item" href="examples/warm-paper-demo/汇报页.html">
+          <div class="item-tag">DEMO</div>
+          <h3>暖纸手记风示例</h3>
+          <p>完整多页叙事汇报页。</p>
+        </a>
+        <a class="item" href="examples/natural-multi-demo/汇报页.html">
+          <div class="item-tag">DEMO</div>
+          <h3>自然多色风示例</h3>
+          <p>多色角色化色板成品演示。</p>
+        </a>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<style>
+  .waffle-matrix {
+    --ed-ink: #1C1A17;
+    --ed-rule: rgba(28, 26, 23, 0.14);
+    --ed-tinted: #F3EFE6;
+    --ed-red: #E05A47;
+    --ed-blue: #2B5B84;
+    --ed-yellow: #F4C430;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+    color: var(--ed-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  }
+  .waffle-matrix__grid { display: grid; grid-template-columns: repeat(10, 18px); gap: 5px; }
+  .waffle-matrix__cell { width: 18px; height: 18px; border-radius: 3px; border: 1px solid var(--ed-rule); transition: transform 0.2s ease, opacity 0.2s ease; }
+  .waffle-matrix__cell.c-red { background: var(--ed-red); border-color: transparent; }
+  .waffle-matrix__cell.c-blue { background: var(--ed-blue); border-color: transparent; }
+  .waffle-matrix__cell.c-yellow { background: var(--ed-yellow); border-color: transparent; }
+  .waffle-matrix__cell.c-empty { background: var(--ed-tinted); }
+  .waffle-matrix__legend { display: grid; gap: 10px; flex: 1; min-width: 180px; }
+  .waffle-matrix__leg-row { display: flex; align-items: center; justify-content: space-between; font-size: 13.5px; padding: 5px 8px; border-bottom: 1px dashed var(--ed-rule); cursor: pointer; }
+  .waffle-matrix__dot { width: 11px; height: 11px; border-radius: 2px; display: inline-block; margin-right: 8px; }
+</style>
+
+<div class="waffle-matrix" data-segments="red:48,blue:28,yellow:14,empty:10" aria-label="10×10 瓦片比例图示例">
+  <div class="waffle-matrix__grid"></div>
+  <div class="waffle-matrix__legend">
+    <div class="waffle-matrix__leg-row" data-cat="red"><span><span class="waffle-matrix__dot" style="background:var(--ed-red)"></span>机械排版调样式</span><strong style="font-family:ui-monospace,Menlo,monospace">48%</strong></div>
+    <div class="waffle-matrix__leg-row" data-cat="blue"><span><span class="waffle-matrix__dot" style="background:var(--ed-blue)"></span>整理证据写逐字稿</span><strong style="font-family:ui-monospace,Menlo,monospace">28%</strong></div>
+    <div class="waffle-matrix__leg-row" data-cat="yellow"><span><span class="waffle-matrix__dot" style="background:var(--ed-yellow)"></span>核对图表与口径</span><strong style="font-family:ui-monospace,Menlo,monospace">14%</strong></div>
+    <div class="waffle-matrix__leg-row" data-cat="empty"><span><span class="waffle-matrix__dot" style="background:var(--ed-tinted);border:1px solid var(--ed-rule)"></span>真正上台排练</span><strong style="font-family:ui-monospace,Menlo,monospace">10%</strong></div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.waffle-matrix').forEach((root) => {
+    const grid = root.querySelector('.waffle-matrix__grid');
+    if (!grid || grid.children.length > 0) return;
+    const segments = (root.dataset.segments || 'red:48,blue:28,yellow:14,empty:10').split(',');
+    segments.forEach((entry) => {
+      const [cat, count] = entry.split(':');
+      for (let i = 0; i < Number(count); i += 1) {
+        const cell = document.createElement('div');
+        cell.className = `waffle-matrix__cell c-${cat.trim()}`;
+        cell.dataset.cat = cat.trim();
+        grid.appendChild(cell);
+      }
+    });
+    const cells = grid.querySelectorAll('.waffle-matrix__cell');
+    root.querySelectorAll('.waffle-matrix__leg-row').forEach((row) => {
+      row.addEventListener('mouseenter', () => {
+        cells.forEach((c) => { c.style.opacity = c.dataset.cat === row.dataset.cat ? '1' : '0.22'; });
+      });
+      row.addEventListener('mouseleave', () => {
+        cells.forEach((c) => { c.style.opacity = '1'; });
+      });
+    });
+  });
+
+  function animateWaffleMatrix(timeline, root, position) {
+    timeline.from(root.querySelectorAll('.waffle-matrix__cell'), { autoAlpha: 0, scale: 0.6, stagger: { amount: 0.45, from: 'start' }, duration: 0.25, ease: 'power2.out' }, position);
+  }
+</script>

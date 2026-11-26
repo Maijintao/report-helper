@@ -15,6 +15,23 @@
 | [手记时间线](../../../assets/html/components/timeline/warm-paper.html) | 用纸面与日期标签记录项目进程 | 暖纸手记风 |
 | [自然多色时间线](../../../assets/html/components/timeline/natural-multi.html) | 用相连的彩色节点讲述阶段变化 | 自然多色风 |
 | [交错卡片时间线](../../../assets/html/components/timeline/alternating-cards.html) | 用交错卡片和虚线展示步骤或时间进程 | 轻盈纸片风 |
+| [档案风竖向时间轴](../../../assets/html/components/timeline/editorial-chronology.html) | 左侧竖向里程碑联动右侧微倾胶带便利贴 | 杂志手绘风 |
+
+## 杂志数据新闻与手绘组件
+
+面向「杂志手绘风」及其他强调编辑部质感的汇报页。全部基于纯 SVG + 粉笔颗粒滤镜（`#chalk-texture`）构建，零外部图表库依赖。整页复用多个手绘组件时，可将 [全局 SVG 滤镜字典](../../../assets/html/components/editorial/svg-filters.html) 放入 `<body>` 顶部一次，避免重复声明 `<defs>`。
+
+| 组件 | 适合的页面 | 动画函数 |
+| --- | --- | --- |
+| [粉笔手绘行内批注三件套](../../../assets/html/components/editorial/chalk-annotations.html) | 导语或结论段内叠不闭合圆圈、双层粉笔底线与荧光涂抹 | `animateChalkAnnotations` |
+| [胶带便利贴与弯曲箭头](../../../assets/html/components/editorial/sticky-margin-note.html) | 有机贝塞尔弯曲箭头指向微倾 `-1.5deg` 的和纸胶带边注 | `animateStickyMarginNote` |
+| [无框编辑部 KPI 指标栏](../../../assets/html/components/editorial/kpi-strip.html) | 细墨线分栏展示核心指标，朱砂红手绘圈出关键异常值 | `animateEditorialKpi` |
+| [哑铃对比图](../../../assets/html/components/editorial/dumbbell-gap.html) | 展示优化前后差距或现状与目标鸿沟，按降幅排序 | `animateDumbbellGap` |
+| [斜率跃迁图](../../../assets/html/components/editorial/slopegraph.html) | 展示两期之间多指标排名与数值跃迁，朱砂线凸显主角 | `animateSlopegraph` |
+| [斜纹排线对比条](../../../assets/html/components/editorial/hatched-bars.html) | 手绘抖动边框 + 45° 斜线排线填充 + 微倾验收印章 | `animateHatchedBars` |
+| [10×10 瓦片比例图](../../../assets/html/components/editorial/waffle-matrix.html) | 用 100 格直观表达比例构成，悬停图例高亮对应区块 | `animateWaffleMatrix` |
+| [有机弯曲箭头因果流](../../../assets/html/components/editorial/organic-flow.html) | 3 步横向叙事流，弯曲贝塞尔箭头连接（无直角折线） | `animateOrganicFlow` |
+| [学术三线表与拉引金句](../../../assets/html/components/editorial/three-line-table.html) | 去冗余边框的三线对比表叠手绘圈注，配破格大引文 | `animateThreeLineTable` |
 
 ## 图表
 

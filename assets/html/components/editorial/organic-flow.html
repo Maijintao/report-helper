@@ -1,0 +1,86 @@
+<svg style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none" aria-hidden="true">
+  <defs>
+    <filter id="chalk-texture" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" seed="7" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+
+<style>
+  .organic-flow {
+    --ed-bg-card: #FFFFFF;
+    --ed-tinted: #F3EFE6;
+    --ed-ink: #1C1A17;
+    --ed-secondary: #565047;
+    --ed-rule-strong: rgba(28, 26, 23, 0.78);
+    --ed-red: #E05A47;
+    --ed-blue: #2B5B84;
+    --ed-green: #2E6F5E;
+    background: var(--ed-tinted);
+    border-top: 1px solid var(--ed-rule-strong);
+    border-bottom: 1px solid var(--ed-rule-strong);
+    padding: 22px 18px;
+    color: var(--ed-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  }
+  .organic-flow__svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .organic-flow__node { cursor: pointer; }
+  .organic-flow__box { fill: var(--ed-bg-card); stroke: var(--ed-ink); stroke-width: 1.6; transition: stroke 0.2s ease, stroke-width 0.2s ease; }
+  .organic-flow__node.is-active .organic-flow__box, .organic-flow__node:hover .organic-flow__box { stroke: var(--ed-red); stroke-width: 2.2; }
+  .organic-flow__caption { margin-top: 14px; font-size: 14px; color: var(--ed-secondary); }
+  .organic-flow__caption strong { color: var(--ed-ink); font-family: "Songti SC", "Noto Serif SC", Georgia, serif; }
+</style>
+
+<div class="organic-flow" aria-label="有机弯曲箭头因果流示例">
+  <svg class="organic-flow__svg" viewBox="0 0 920 165">
+    <path class="draw-stroke" d="M 244 76 C 276 48, 306 48, 336 74" fill="none" stroke="var(--ed-blue)" stroke-width="2.4" stroke-linecap="round" filter="url(#chalk-texture)" />
+    <path class="draw-stroke" d="M 326 64 C 330 69, 334 72, 338 75 C 332 76, 326 78, 321 81" fill="none" stroke="var(--ed-blue)" stroke-width="2.4" stroke-linecap="round" filter="url(#chalk-texture)" />
+
+    <path class="draw-stroke" d="M 580 90 C 612 118, 642 118, 672 90" fill="none" stroke="var(--ed-red)" stroke-width="2.4" stroke-linecap="round" filter="url(#chalk-texture)" />
+    <path class="draw-stroke" d="M 661 88 C 666 88, 670 89, 674 89 C 671 94, 668 99, 666 104" fill="none" stroke="var(--ed-red)" stroke-width="2.4" stroke-linecap="round" filter="url(#chalk-texture)" />
+
+    <g class="organic-flow__node is-active" data-title="STAGE 01 · 抽取证据链：" data-desc="先把项目里的真实数字、对比实验和关键结论结构化，再分配每页图表。" transform="translate(18, 34)">
+      <rect class="organic-flow__box" width="220" height="96" rx="4" filter="url(#chalk-texture)" />
+      <text x="18" y="28" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="var(--ed-red)" font-weight="700">STAGE 01</text>
+      <text x="18" y="54" font-family="'Songti SC', Georgia, serif" font-size="18" fill="var(--ed-ink)" font-weight="700">抽取证据链</text>
+      <text x="18" y="78" font-size="12.5" fill="var(--ed-secondary)">代码 / 笔记 / 实测数据同源</text>
+    </g>
+    <g class="organic-flow__node" data-title="STAGE 02 · 杂志化编排与批注：" data-desc="以宽敞留白、细墨线与每屏不超过 3 处的手绘批注精确引导视线。" transform="translate(348, 34)">
+      <rect class="organic-flow__box" width="224" height="96" rx="4" filter="url(#chalk-texture)" />
+      <text x="18" y="28" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="var(--ed-blue)" font-weight="700">STAGE 02</text>
+      <text x="18" y="54" font-family="'Songti SC', Georgia, serif" font-size="18" fill="var(--ed-ink)" font-weight="700">杂志化编排与批注</text>
+      <text x="18" y="78" font-size="12.5" fill="var(--ed-secondary)">每屏最多 3 处手绘焦点</text>
+    </g>
+    <g class="organic-flow__node" data-title="STAGE 03 · 单文件离线交付：" data-desc="全量内联 GSAP 与 SVG 滤镜，零外部依赖，双击即开。" transform="translate(682, 34)">
+      <rect class="organic-flow__box" width="220" height="96" rx="4" filter="url(#chalk-texture)" />
+      <text x="18" y="28" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="var(--ed-green)" font-weight="700">STAGE 03</text>
+      <text x="18" y="54" font-family="'Songti SC', Georgia, serif" font-size="18" fill="var(--ed-ink)" font-weight="700">单文件离线交付</text>
+      <text x="18" y="78" font-size="12.5" fill="var(--ed-secondary)">内联 GSAP + 逐字稿联动</text>
+    </g>
+  </svg>
+  <div class="organic-flow__caption"><strong>STAGE 01 · 抽取证据链：</strong><span>先把项目里的真实数字、对比实验和关键结论结构化，再分配每页图表。</span></div>
+</div>
+
+<script>
+  document.querySelectorAll('.organic-flow').forEach((root) => {
+    const nodes = root.querySelectorAll('.organic-flow__node');
+    const capTitle = root.querySelector('.organic-flow__caption strong');
+    const capDesc = root.querySelector('.organic-flow__caption span');
+    nodes.forEach((node) => {
+      node.addEventListener('click', () => {
+        nodes.forEach((n) => n.classList.toggle('is-active', n === node));
+        if (capTitle) capTitle.textContent = node.dataset.title || '';
+        if (capDesc) capDesc.textContent = node.dataset.desc || '';
+      });
+    });
+  });
+
+  function animateOrganicFlow(timeline, root, position) {
+    timeline.from(root.querySelectorAll('.organic-flow__node'), { autoAlpha: 0, y: 14, stagger: 0.12, duration: 0.45, ease: 'power2.out' }, position);
+    root.querySelectorAll('.draw-stroke').forEach((p) => {
+      const len = p.getTotalLength ? p.getTotalLength() : 140;
+      timeline.fromTo(p, { strokeDasharray: len + 6, strokeDashoffset: len + 6 }, { strokeDashoffset: 0, duration: 0.55, ease: 'power2.out' }, '-=0.35');
+    });
+  }
+</script>

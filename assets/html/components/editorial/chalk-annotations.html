@@ -1,0 +1,60 @@
+<svg style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none" aria-hidden="true">
+  <defs>
+    <filter id="chalk-texture" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" seed="7" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+
+<style>
+  .chalk-annotations {
+    --ed-red: #E05A47;
+    --ed-yellow: #F4C430;
+    --ed-blue: #2B5B84;
+    font-family: "Songti SC", "Noto Serif SC", Georgia, serif;
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    line-height: 2;
+    color: #1C1A17;
+  }
+  .annotate-wrap { position: relative; display: inline-block; z-index: 1; padding: 0 4px; font-weight: 700; }
+  .hand-circle-svg { position: absolute; left: -14%; top: -26%; width: 128%; height: 152%; pointer-events: none; overflow: visible; }
+  .chalk-underline-svg { position: absolute; left: -3%; bottom: -5px; width: 106%; height: 12px; pointer-events: none; overflow: visible; }
+  .highlighter-svg { position: absolute; left: -5%; top: 12%; width: 110%; height: 82%; z-index: -1; pointer-events: none; overflow: visible; }
+</style>
+
+<p class="chalk-annotations">
+  单屏内手绘批注严守克制原则：用朱砂红圈出
+  <span class="annotate-wrap">
+    核心异常点
+    <svg class="hand-circle-svg" viewBox="0 0 160 66" preserveAspectRatio="none" aria-hidden="true">
+      <path class="draw-stroke" d="M 24 16 C 58 4, 128 5, 146 24 C 158 38, 136 58, 78 58 C 24 58, 8 44, 14 27 C 19 14, 52 10, 88 12" fill="none" stroke="var(--ed-red)" stroke-width="2.6" stroke-linecap="round" filter="url(#chalk-texture)" />
+    </svg>
+  </span>
+  ，用芥末黄荧光笔涂抹
+  <span class="annotate-wrap">
+    关键交付结论
+    <svg class="highlighter-svg" viewBox="0 0 210 42" preserveAspectRatio="none" aria-hidden="true">
+      <path class="draw-stroke" d="M 8 24 Q 72 19, 138 22 T 202 20" fill="none" stroke="var(--ed-yellow)" stroke-width="18" stroke-linecap="round" opacity="0.36" filter="url(#chalk-texture)" />
+    </svg>
+  </span>
+  ，再为支撑论据加上
+  <span class="annotate-wrap">
+    双层粉笔底线
+    <svg class="chalk-underline-svg" viewBox="0 0 160 22" preserveAspectRatio="none" aria-hidden="true">
+      <path class="draw-stroke" d="M 4 11 Q 44 6, 84 11 T 156 9" fill="none" stroke="var(--ed-blue)" stroke-width="2.6" stroke-linecap="round" filter="url(#chalk-texture)" />
+      <path class="draw-stroke" d="M 10 16 Q 54 12, 98 16 T 150 14" fill="none" stroke="var(--ed-blue)" stroke-width="1.5" stroke-linecap="round" opacity="0.72" filter="url(#chalk-texture)" />
+    </svg>
+  </span>
+  。
+</p>
+
+<script>
+  function animateChalkAnnotations(timeline, root, position) {
+    const strokes = root.querySelectorAll('.draw-stroke');
+    strokes.forEach((p, idx) => {
+      const len = p.getTotalLength ? p.getTotalLength() : 200;
+      timeline.fromTo(p, { strokeDasharray: len + 6, strokeDashoffset: len + 6 }, { strokeDashoffset: 0, duration: 0.65, ease: 'power2.out' }, idx === 0 ? position : '-=0.45');
+    });
+  }
+</script>

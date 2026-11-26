@@ -1,0 +1,77 @@
+<svg style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none" aria-hidden="true">
+  <defs>
+    <filter id="chalk-texture" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" seed="7" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+
+<style>
+  .editorial-kpi {
+    --ed-ink: #1C1A17;
+    --ed-secondary: #565047;
+    --ed-muted: #867E73;
+    --ed-rule: rgba(28, 26, 23, 0.14);
+    --ed-rule-strong: rgba(28, 26, 23, 0.78);
+    --ed-red: #E05A47;
+    --ed-green: #2E6F5E;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 2px solid var(--ed-rule-strong);
+    border-bottom: 1px solid var(--ed-rule);
+    color: var(--ed-ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  }
+  .editorial-kpi__cell { padding: 24px 22px; border-right: 1px solid var(--ed-rule); }
+  .editorial-kpi__cell:last-child { border-right: none; }
+  .editorial-kpi__eyebrow { font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.08em; color: var(--ed-muted); text-transform: uppercase; }
+  .editorial-kpi__big { font-family: "Songti SC", "Noto Serif SC", Georgia, serif; font-size: clamp(34px, 4vw, 50px); font-weight: 700; line-height: 1.1; margin: 10px 0 8px; font-variant-numeric: tabular-nums; display: flex; align-items: baseline; gap: 8px; }
+  .editorial-kpi__delta { font-family: ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700; color: var(--ed-green); }
+  .editorial-kpi__delta--alert { color: var(--ed-red); }
+  .editorial-kpi__note { margin: 0; font-size: 14px; color: var(--ed-secondary); }
+  .editorial-kpi__circle-wrap { position: relative; display: inline-block; padding: 0 8px; }
+  .editorial-kpi__circle-svg { position: absolute; left: -14%; top: -24%; width: 128%; height: 148%; pointer-events: none; overflow: visible; }
+  @media (max-width: 44rem) {
+    .editorial-kpi { grid-template-columns: 1fr; }
+    .editorial-kpi__cell { border-right: none; border-bottom: 1px solid var(--ed-rule); padding: 18px 0; }
+    .editorial-kpi__cell:last-child { border-bottom: none; }
+  }
+</style>
+
+<div class="editorial-kpi" aria-label="核心验收指标栏示例">
+  <div class="editorial-kpi__cell">
+    <div class="editorial-kpi__eyebrow">P99 端到端响应延迟</div>
+    <div class="editorial-kpi__big">18.4<small style="font-size:0.42em">ms</small> <span class="editorial-kpi__delta">↓ 64%</span></div>
+    <p class="editorial-kpi__note">较基线 51.2 ms 大幅收敛，长尾抖动清零。</p>
+  </div>
+  <div class="editorial-kpi__cell">
+    <div class="editorial-kpi__eyebrow">单文件离线首屏渲染</div>
+    <div class="editorial-kpi__big">
+      <span class="editorial-kpi__circle-wrap">
+        42<small style="font-size:0.42em">ms</small>
+        <svg class="editorial-kpi__circle-svg" viewBox="0 0 150 76" preserveAspectRatio="none" aria-hidden="true">
+          <path class="draw-stroke" d="M 22 18 C 52 5, 118 6, 136 28 C 146 44, 124 66, 74 66 C 24 66, 8 50, 14 30 C 20 14, 54 11, 86 14" fill="none" stroke="var(--ed-red)" stroke-width="2.8" stroke-linecap="round" filter="url(#chalk-texture)" />
+        </svg>
+      </span>
+      <span class="editorial-kpi__delta editorial-kpi__delta--alert">★ 突破阈值</span>
+    </div>
+    <p class="editorial-kpi__note">断网零外部请求，投影机双击秒开。</p>
+  </div>
+  <div class="editorial-kpi__cell">
+    <div class="editorial-kpi__eyebrow">稿页数据口径一致率</div>
+    <div class="editorial-kpi__big">100<small style="font-size:0.42em">%</small> <span class="editorial-kpi__delta">✓ 同源</span></div>
+    <p class="editorial-kpi__note">逐字稿与汇报页共用同一份证据表。</p>
+  </div>
+</div>
+
+<script>
+  function animateEditorialKpi(timeline, root, position) {
+    timeline.from(root.querySelectorAll('.editorial-kpi__cell'), { autoAlpha: 0, y: 18, stagger: 0.1, duration: 0.45, ease: 'power2.out' }, position);
+    const circle = root.querySelector('.draw-stroke');
+    if (circle) {
+      const len = circle.getTotalLength ? circle.getTotalLength() : 320;
+      timeline.fromTo(circle, { strokeDasharray: len + 6, strokeDashoffset: len + 6 }, { strokeDashoffset: 0, duration: 0.7, ease: 'power2.out' }, '-=0.2');
+    }
+  }
+</script>
